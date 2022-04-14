@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,        initial-scale=1.0" content-"ie=edge">
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <title>Employee Form</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+
+        {% if message %}
+        <!-- safe is a security measure -->
+        <p class="message">{{message | safe}}</p>
+        {% endif %}
+        <form action="/submit" method="POST">
+            <div class="form-group">
+                <h3>Employee Form</h3>
+                <input type="text" name="first_name" placeholder="First Name" />
+                <input type="text" name="last_name" placeholder="Last Name" />
+                <label for="phone">Employee's phone number:</label>
+                <input type="tel" id="phone" name="phone" placeholder="000-000-0000"
+                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                <br>
+                <label for="dob">Employee's date of birth:</label>
+                <input type="date" name="dob" placeholder="Employee's Date of Birth" />
+                <br>
+                <label>Gender:</label>
+                <input type="radio" name="gender" value="1" /> Male
+                <input type="radio" name="gender" value="2" /> Female
+                <label for="hire">Employee's hire date:</label>
+                <input type="date" name="hire" placeholder="Employee's hire date" />
+                <br>
+                <label for="dept">Select department:</label>
+                <select name="dept">
+                    <option value="">Select Department</option>
+                    <option value="1">Dept 1</option>
+                    <option value="2">Dept 2</option>
+                    <option value="3">Dept 3</option>
+                    <option value="4">Dept 4</option>
+                </select>
+            </div>
+            <br>
+            <!-- button -->
+            <input type="submit" value="Submit" class="btn" />
+
+        </form>
+
+    </div>
+</body>
+
+</html>

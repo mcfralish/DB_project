@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,        initial-scale=1.0" content-"ie=edge">
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <title>Management Login</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+        <form action="/submit" method="POST">
+            <div class="form">
+                <fieldset>
+                    <legend>Sign In:</legend>
+                    <label for="login">Login:</label>
+                    <input type="text" id="login" name="login"><br><br>
+                    <label for="dept">Select a department:</label>
+                    <select id="dept">
+                        <option value="dept_A">dept A</option>
+                        <option value="dept_B">dept B</option>
+                        <option value="dept_C">dept C</option>
+                        <option value="dept_D">dept D</option>
+                    </select>
+                    <br>
+                </fieldset>
+                <!-- button -->
+                <input type="submit" value="Submit" class="btn" />
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

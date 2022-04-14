@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" content-"ie=edge">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 40%;
+        }
+
+        th,
+        td {
+            border: 2px solid green;
+            padding: 5px;
+        }
+    </style>
+    <title>Patient System</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+        <form action="/submit" method="POST">
+            <div class="form">
+                <fieldset>
+                    <legend>Upcoming Tasks:</legend>
+                    <select id="thelist" size="4">
+                        <option value="1">Task 1</option>
+                        <option value="2">Task 2</option>
+                        <option value="3">Task 3</option>
+                        <option value="4">Task 4</option>
+                    </select>
+                    <br>
+                    <button type="button">Select task</button>
+                    <br>
+                    <br>
+                </fieldset>
+                <br>
+                <fieldset>
+                    <legend>Medication ledger:</legend>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Dosage(mg)</th>
+                            <th>Frequency(mins)</th>
+                        </tr>
+                        <tr>
+                            <td>Medication A</td>
+                            <td>5</td>
+                            <td>240</td>
+                        </tr>
+                        <tr>
+                            <td>Medication B</td>
+                            <td>10</td>
+                            <td>480</td>
+                        </tr>
+                        <tr>
+                            <td>Medication C</td>
+                            <td>20</td>
+                            <td>240</td>
+                        </tr>
+                        <tr>
+                            <td>Medication D</td>
+                            <td>10</td>
+                            <td>180</td>
+                        </tr>
+                    </table>
+                    <br>
+                </fieldset>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

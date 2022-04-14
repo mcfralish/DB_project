@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,        initial-scale=1.0" content-"ie=edge">
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <title>Task Form</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+
+        {% if message %}
+        <!-- safe is a security measure -->
+        <p class="message">{{message | safe}}</p>
+        {% endif %}
+        <form action="/submit" method="POST">
+            <div class="form-group">
+                <h3>Task Form</h3>
+                <input type="text" name="name" placeholder="Task name" />
+                <label for="task_start">Task start date/time:</label>
+                <input type="datetime-local" id="task_start" name="task_start" min="00:00" max="24:00" required>
+                <br>
+                <label for="task_end">Task end date/time:</label>
+                <input type="datetime-local" id="task_end" name="task_end" min="00:00" max="24:00" required>
+                <br>
+                <label for="required">Required:</label>
+                <input type="radio" name="required" value="1" /> Yes
+                <input type="radio" name="required" value="2" /> No
+                <br>
+                <label for="recurring">Recurring Event:</label>
+                <input type="radio" name="recurring" value="1" /> Yes
+                <input type="radio" name="recurring" value="2" /> No
+                <br>
+                <input type="text" name="recurring_min" placeholder="next recurrence in mins" />
+            </div>
+            <br>
+            <!-- button -->
+            <input type="submit" value="Submit" class="btn" />
+
+        </form>
+
+    </div>
+</body>
+
+</html>

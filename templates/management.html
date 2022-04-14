@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" content-"ie=edge">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 40%;
+        }
+
+        th,
+        td {
+            border: 2px solid green;
+            padding: 5px;
+        }
+    </style>
+    <title>Management System</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+        <form action="/submit" method="POST">
+            <div class="form">
+                <fieldset>
+                    <legend>All Employees:</legend>
+                    <select id="thelist" size="4">
+                        <option value="1">Employee A</option>
+                        <option value="2">Employee B</option>
+                        <option value="3">Employee C</option>
+                        <option value="4">Employee D</option>
+                    </select>
+                    <br>
+                    <button type="button">Assign a task</button>
+                    <br>
+                    <br>
+                </fieldset>
+                <br>
+                <fieldset>
+                    <legend>All Tasks:</legend>
+                    <table>
+                        <tr>
+                            <th>Task</th>
+                            <th>Patient's Name</th>
+                            <th>Assigned Employee</th>
+                            <th>Rating</th>
+                        </tr>
+                        <tr>
+                            <td>Task 1</td>
+                            <td>Patient B</td>
+                            <td>Employee B</td>
+                            <td>9</td>
+                        </tr>
+                        <tr>
+                            <td>Task 2</td>
+                            <td>Patient C</td>
+                            <td>Employee D</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>Task A</td>
+                            <td>Patient B</td>
+                            <td>Null</td>
+                            <td>Null</td>
+                        </tr>
+                        <tr>
+                            <td>Task C</td>
+                            <td>Patient D</td>
+                            <td>Employee A</td>
+                            <td>8</td>
+                        </tr>
+                    </table>
+                    <br>
+                </fieldset>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
