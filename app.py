@@ -1,17 +1,27 @@
 # https://stackoverflow.com/questions/22364551/creating-flask-form-with-selects-from-more-than-one-table
 # https://docs.sqlalchemy.org/en/14/core/type_basics.html#sqlalchemy.types.Time
 # last_updated = db.Column(db.DateTime, default=datetime.datetime.now())
-
+import os
 from flask import Flask, render_template
 from dotenv import load_dotenv, find_dotenv
-from models import db, Shift, Empl, Guest, Meds
+from models import (
+    db,
+    assigned_task_table,
+    Department,
+    Shift,
+    Certification,
+    Employee,
+    Patient,
+    Guest,
+    Task,
+)
 import datetime
 
 
 load_dotenv(find_dotenv())
 app = Flask(__name__)
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+# app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("NEW_DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
