@@ -18,19 +18,21 @@
         <form action="/submit" method="POST">
             <div class="form-group">
                 <h3>Visitor Form</h3>
-                <input type="text" name="first_name" placeholder="First Name" />
-                <input type="text" name="last_name" placeholder="Last Name" />
-                <input type="text" name="relationship" placeholder="Relationship" />
-                <label for="thelist">Select patient:</label>
+                <input type="text" name="dept_name" placeholder="Department name" />
+                <label for="thelist">Select building:</label>
                 <select id="thelist" size="4">
-                    <option value="1">Patient 1</option>
-                    <option value="2">Patient 2</option>
-                    <option value="3">Patient 3</option>
-                    <option value="4">Patient 4</option>
+                    <option value="1">Building 1</option>
+                    <option value="2">Building 2</option>
+                    <option value="3">Building 3</option>
+                    <option value="4">Building 4</option>
                 </select>
-
-                <label for="visit_start">Visitation date/time:</label>
-                <input type="datetime-local" id="visit_start" name="visit_start" min="00:00" max="24:00" required>
+                <label for="thelist">Select floor:</label>
+                <select id="thelist" size="4">
+                    <option value="1">Floor 1</option>
+                    <option value="2">Floor 2</option>
+                    <option value="3">Floor 3</option>
+                    <option value="4">Floor 4</option>
+                </select>
                 <br>
             </div>
             <br>
