@@ -14,24 +14,54 @@
     <div class="container">
 
         <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
-        <form action="/submit" method="POST">
+        <form action="/handle_form" method="POST">
             <div class="form-group">
                 <h3>Patient Form</h3>
-                <input type="text" name="first_name" placeholder="Patient's First Name" />
-                <input type="text" name="last_name" placeholder="Patient's Last Name" />
+                <input type="hidden" name="type" value="patient" />
+                <input type="text" name="first_name" placeholder="First Name" required />
+                <br>
+                <br>
+                <input type="text" name="last_name" placeholder="Last Name" required />
+                <br>
+                <br>
                 <label for="phone">Patient's phone number:</label>
-                <input type="tel" id="phone" name="phone" placeholder="000-000-0000"
-                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                <br>
+                <input type="tel" id="phone" name="phone" placeholder="000-000-0000" required>
+                <br>
                 <br>
                 <label for="dob">Patient's date of birth:</label>
-                <input type="date" name="dob" placeholder="Employee's Date of Birth" />
+                <br>
+                <input type="date" name="dob" required />
+                <br>
                 <br>
                 <label>Gender:</label>
-                <input type="radio" name="gender" value="1" /> Male
-                <input type="radio" name="gender" value="2" /> Female
+                <br>
+                <input type="radio" name="gender" value="M" checked /> Male
+                <input type="radio" name="gender" value="F" /> Female
+                <br>
+                <br>
+                <label for="hire">Patient's Date of Admission:</label>
+                <br>
+                <input type="date" name="adm" />
+                <br>
+                <br>
+                <label for="dept">Select department:</label>
+                <select name="dept_no" id="dept" required>
+                    {% for i in range(depts | length )%}
+                    <option value={{depts[i].dept_no}}>{{depts[i].dept_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <br>
+                <label for="caretaker">Select Caretaker:</label>
+                <select name="caretaker_no" id="caretaker">
+                    {% for i in range(emps | length )%}
+                    <option value={{emps[i].empl_no}}>{{emps[i].last_name}}, {{emps[i].first_name}}
+                        {{certs[emps[i].cert_no - 1].cert_name}}</option>
+                    {% endfor %}
+                </select>
             </div>
             <br>
-            <!-- button -->
             <input type="submit" value="Submit" class="btn" />
 
         </form>

@@ -15,28 +15,38 @@
 
         <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
 
-        <form action="/submit" method="POST">
+        <form action="/handle_form" method="POST">
             <div class="form-group">
-                <h3>Visitor Form</h3>
-                <input type="text" name="dept_name" placeholder="Department name" />
+                <h3>Department Form</h3>
+                <input type="hidden" name="type" value="department"" />
+                <input type=" text" name="dept_name" placeholder="Department name" />
+                <br>
+                <br>
                 <label for="thelist">Select building:</label>
-                <select id="thelist" size="4">
-                    <option value="1">Building 1</option>
-                    <option value="2">Building 2</option>
-                    <option value="3">Building 3</option>
-                    <option value="4">Building 4</option>
+                <select id="thelist" name="building">
+                    <option value="Main">Main</option>
+                    <option value="Annex">Annex</option>
+                    <option value="Health Pavilion">Health Pavilion</option>
+                    <option value="Trauma Center">Trauma Center</option>
                 </select>
+                <br>
+                <br>
                 <label for="thelist">Select floor:</label>
-                <select id="thelist" size="4">
+                <select id="thelist" name="floor">
                     <option value="1">Floor 1</option>
                     <option value="2">Floor 2</option>
                     <option value="3">Floor 3</option>
                     <option value="4">Floor 4</option>
+                    <option value="4">Floor 5</option>
+                    <option value="4">Floor 6</option>
+                    <option value="4">Floor 7</option>
+                    <option value="4">Floor 8</option>
+                    <option value="4">Floor 9</option>
+                    <option value="4">Floor 10</option>
                 </select>
                 <br>
             </div>
             <br>
-            <!-- button -->
             <input type="submit" value="Submit" class="btn" />
 
         </form>
