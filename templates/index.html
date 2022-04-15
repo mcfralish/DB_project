@@ -14,12 +14,22 @@
     <div class="container">
 
         <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
-        <form action="/submit" method="POST">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block body %}{% endblock %}
+        <form action="/" method="POST">
             <div class="form-group">
                 <h3>Login Option:</h3>
-                <input type="radio" name="management" value="1" /> Management </input><br>
-                <input type="radio" name="patient" value="2" checked /> Patient </input><br>
-                <input type="radio" name="administration" value="3" checked /> Administration </input><br>
+                <input type="radio" name="user" value="management" /> Management </input><br>
+                <input type="radio" name="user" value="patient" /> Patient </input><br>
+                <input type="radio" name="user" value="administration" /> Administration </input><br>
             </div>
             <br>
             <!-- button -->
