@@ -1,6 +1,5 @@
 # https://stackoverflow.com/questions/22364551/creating-flask-form-with-selects-from-more-than-one-table
 # https://docs.sqlalchemy.org/en/14/core/type_basics.html#sqlalchemy.types.Time
-# last_updated = db.Column(db.DateTime, default=datetime.datetime.now())
 import os
 from flask import Flask, flash, render_template, redirect, request, url_for
 from flask_login import (
@@ -14,7 +13,7 @@ from dotenv import load_dotenv, find_dotenv
 from models import (
     Users,
     db,
-    assigned_task_table,
+    # assigned_task_table,
     Department,
     Shift,
     Certification,
@@ -224,7 +223,6 @@ def handle_admin():
             admission_date=str(data["adm"]),
             login_id=new_user.id,
             dept_no=int(data["dept_no"]),
-            caretaker_nos=[],
         )
 
     if data["type"] == "visitor":
@@ -274,29 +272,27 @@ def manager():
     tasks = Task.query.all()
     dep_pts = Patient.query.filter_by(dept_no=dep.dept_no).all()
     dep_emps = Employee.query.all()
+    unassigned_tasks = AssignedTask.query.filter_by(assigned_caregiver=None).all()
+    all_tasks = AssignedTask.query.all()
+    assigned_tasks = []
+    for task in all_tasks:
+        if task.assigned_caregiver != None:
+            assigned_tasks.append(task)
 
-    # dep_nurses = Employee.query.filter_by(
-    #     dept_no=dep.dept_no,
-    #     cert_no=Certification.query.filter_by(cert_name="R.N.").first().cert_no,
-    # ).all()
-
-    # dep_docs = Employee.query.filter_by(
-    #     dept_no=dep.dept_no,
-    #     cert_no=Certification.query.filter_by(cert_name="M.D.").first().cert_no,
-    # ).all()
-
-    # dep_cnas = Employee.query.filter_by(
-    #     dept_no=dep.dept_no,
-    #     cert_no=Certification.query.filter_by(cert_name="C.N.A.").first().cert_no,
-    # ).all()
+    unassigned_tasks.sort(key=lambda x: Task.query.filter_by(task_no=x.task_no).first())
+    assigned_tasks.sort(key=lambda x: Task.query.filter_by(task_no=x.task_no).first())
 
     if request.method == "POST":
         data = request.form
 
         if data["action"] == "assign_task":
-            pt = Patient.query.filter_by(patient_no=data["pt_no"])
-            emp = Employee.query.filter_by(emp_no=data["emp_no"])
-            task = Task.query.filter_by(task_no=data["task_no"])
+            assign = AssignedTask(
+                requesting_pt=data["pt_no"],
+                task_no=data["task_no"],
+                assigned_caregiver=data["emp_no"],
+            )
+            db.session.add(assign)
+            db.session.commit()
 
     return render_template(
         "management.html",
@@ -306,6 +302,8 @@ def manager():
         dep_emps=dep_emps,
         certs=certs,
         tasks=tasks,
+        unassigned_tasks=unassigned_tasks,
+        assigned_tasks=assigned_tasks,
     )
 
 

@@ -9,13 +9,13 @@ meta = MetaData()
 db = SQLAlchemy()
 
 
-assigned_task_table = db.Table(
-    "task",
-    meta,
-    db.Column("task_id", ForeignKey("Task.id"), primary_key=True),
-    db.Column("patient_id", ForeignKey("Patient.id"), primary_key=True),
-    db.Column("emp_id", ForeignKey("Employee.id"), primary_key=True),
-)
+# assigned_task_table = db.Table(
+#     "task",
+#     meta,
+#     db.Column("task_id", ForeignKey("Task.id"), primary_key=True),
+#     db.Column("patient_id", ForeignKey("Patient.id"), primary_key=True),
+#     db.Column("emp_id", ForeignKey("Employee.id"), primary_key=True),
+# )
 
 
 class Users(db.Model, UserMixin, Base):
@@ -73,7 +73,6 @@ class Patient(db.Model, Base):
     admission_date = db.Column(db.String(200), nullable=False)
     login_id = db.Column(Integer, ForeignKey(Users.id), nullable=False)
     dept_no = db.Column(db.Integer, ForeignKey(Department.dept_no), nullable=False)
-    caretaker_nos = db.Column(db.ARRAY(db.Integer, ForeignKey(Employee.empl_no)))
     visitors = relationship("Visitor")
     requested_tasks = relationship("AssignedTask")
 
@@ -100,8 +99,7 @@ class Task(db.Model, Base):
 
 
 class AssignedTask(db.Model, Base):
-    requesting_pt = db.Column(
-        db.Integer, ForeignKey(Patient.patient_no), primary_key=True
-    )
-    task_no = db.Column(db.Integer, ForeignKey(Task.task_no), primary_key=True)
+    at_no = db.Column(db.Integer, primary_key=True)
+    requesting_pt = db.Column(db.Integer, ForeignKey(Patient.patient_no))
+    task_no = db.Column(db.Integer, ForeignKey(Task.task_no))
     assigned_caregiver = db.Column(db.Integer, ForeignKey(Employee.empl_no))
