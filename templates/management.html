@@ -20,8 +20,7 @@
 </head>
 
 <body>
-    <div class="container">
-
+    <div class="header">
         <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
         <h1>{{dep.dept_name}}</h1>
         <h2>Welcome {{manager.first_name}} {{manager.last_name}} {{certs[manager.cert_no - 1].cert_name}}</h2>
@@ -29,7 +28,8 @@
     <div class="assign_task">
         <form action="/manager" method="POST">
             <fieldset>
-                <legend>Department Employees:</legend>
+                <legend>Assign Task:</legend>
+                <label>Department Employees:</label>
                 <!-- <select id="thelist" name="emp_no" size={{dep_emps | length }}> -->
                 <input type="hidden" name="action" value="assign_task" />
                 <select id="thelist" name="emp_no">
@@ -39,7 +39,7 @@
                     {% endfor %}
                 </select>
                 <br>
-                <legend>Department Patients:</legend>
+                <label>Department Patients:</label>
                 <!-- <select id="thelist" name="pt_no" size={{dep_pts | length }}> -->
                 <select id="thelist" name="pt_no">
                     {% for i in range(dep_pts | length) %}
@@ -48,7 +48,7 @@
                     {% endfor %}
                 </select>
                 <br>
-                <legend>Tasks:</legend>
+                <label>Tasks:</label>
                 <!-- <select id="thelist" name="tasn_no" size={{tasks | length }}> -->
                 <select id="thelist" name="task_no">
                     {% for i in range(tasks | length) %}
@@ -56,7 +56,7 @@
                     {% endfor %}
                 </select>
                 <br>
-                <input type="submit" value="Submit" class="btn" />
+                <input type="submit" value="Assign Task" class="btn" />
                 <br>
                 <br>
             </fieldset>

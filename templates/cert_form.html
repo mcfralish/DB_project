@@ -19,10 +19,15 @@
             <div class="form-group">
                 <h3>Add Certification Form</h3>
                 <input type="hidden" name="type" value="certification" />
+                <br>
                 <label for="cert_name">Certification Name:</label>
                 <input type="text" name="cert_name" placeholder="M.D., R.N., etc" />
+                <br>
                 <label for="pay">Hourly Rate:</label>
                 <input type="number" min="0.01" step="0.01" max="2500" name="pay" value="50.00" />
+                <br>
+                <label for="clearance">What is thisclearance level associated with this certification?</label>
+                <input type="number" min="1" max="5" name="clearance" value="5" />
                 <br>
                 <br>
             </div>

@@ -35,9 +35,9 @@ def index():
     dept = Department(dept_name="IPU", building="Health Pavilion", floor=4)
     shift = Shift(work_days="Su M Tu W Th", work_hours="First Shift")
 
-    cert1 = Certification(cert_name="M.D.", pay=150.00)
-    cert2 = Certification(cert_name="R.N.", pay=50.00)
-    cert3 = Certification(cert_name="C.N.A.", pay=20.00)
+    cert1 = Certification(cert_name="M.D.", pay=150.00, clearance=1)
+    cert2 = Certification(cert_name="R.N.", pay=50.00, clearance=3)
+    cert3 = Certification(cert_name="C.N.A.", pay=20.00, clearance=4)
 
     usr1 = Users()
     usr2 = Users()
@@ -97,6 +97,7 @@ def index():
         login_id=4,
         dept_no=1,
     )
+
     pt2 = Patient(
         first_name="Regina",
         last_name="Rollins",
@@ -110,34 +111,44 @@ def index():
 
     task1 = Task(
         task_name="Initial Assessment",
-        required_cert=1,
         priority=1,
         duration=60,
         required=True,
         isMedicine=False,
+        clearance=1,
         recurring=False,
     )
 
     task2 = Task(
         task_name="Give Bath",
-        required_cert=3,
         priority=3,
         duration=60,
         required=True,
         isMedicine=False,
         recurring=True,
+        clearance=4,
         frequency=24,
     )
 
     task3 = Task(
         task_name="Give Pain Meds",
-        required_cert=2,
         priority=1,
         duration=15,
         required=True,
         isMedicine=True,
         recurring=True,
+        clearance=3,
         frequency=6,
+    )
+
+    task4 = Task(
+        task_name="Get Coffee",
+        priority=5,
+        duration=15,
+        required=False,
+        isMedicine=False,
+        recurring=False,
+        clearance=5,
     )
 
     db.session.add(dept)
@@ -158,6 +169,7 @@ def index():
     db.session.add(task1)
     db.session.add(task2)
     db.session.add(task3)
+    db.session.add(task4)
     db.session.commit()
 
     return render_template("index.html")
