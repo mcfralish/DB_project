@@ -15,39 +15,69 @@
 
         <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
 
-        {% if message %}
-        <!-- safe is a security measure -->
-        <p class="message">{{message | safe}}</p>
-        {% endif %}
-        <form action="/submit" method="POST">
+        <form action="/handle_form" method="POST">
             <div class="form-group">
                 <h3>Employee Form</h3>
-                <input type="text" name="first_name" placeholder="First Name" />
-                <input type="text" name="last_name" placeholder="Last Name" />
+                <input type="hidden" name="type" value="employee" />
+                <label for="status">What status is this employee?</label>
+                <br>
+                <input type="radio" name="status" value="A" /> Administrator
+                <input type="radio" name="status" value="M" /> Management
+                <input type="radio" name="status" value="E" /> Employee
+                <br>
+                <br>
+                <input type="text" name="first_name" placeholder="First Name" required />
+                <br>
+                <br>
+                <input type="text" name="last_name" placeholder="Last Name" required />
+                <br>
+                <br>
                 <label for="phone">Employee's phone number:</label>
-                <input type="tel" id="phone" name="phone" placeholder="000-000-0000"
-                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                <br>
+                <input type="tel" id="phone" name="phone" placeholder="000-000-0000" required>
+                <br>
                 <br>
                 <label for="dob">Employee's date of birth:</label>
-                <input type="date" name="dob" placeholder="Employee's Date of Birth" />
+                <br>
+                <input type="date" name="dob" placeholder="Employee's Date of Birth" required />
+                <br>
                 <br>
                 <label>Gender:</label>
-                <input type="radio" name="gender" value="1" /> Male
-                <input type="radio" name="gender" value="2" /> Female
+                <br>
+                <input type="radio" name="gender" value="M" checked /> Male
+                <input type="radio" name="gender" value="F" /> Female
+                <br>
+                <br>
                 <label for="hire">Employee's hire date:</label>
+                <br>
                 <input type="date" name="hire" placeholder="Employee's hire date" />
                 <br>
+                <br>
                 <label for="dept">Select department:</label>
-                <select name="dept">
-                    <option value="">Select Department</option>
-                    <option value="1">Dept 1</option>
-                    <option value="2">Dept 2</option>
-                    <option value="3">Dept 3</option>
-                    <option value="4">Dept 4</option>
+                <select name="dept_no" required>
+                    {% for i in range(depts | length )%}
+                    <option value={{depts[i].dept_no}}>{{depts[i].dept_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <br>
+                <label for="dept">Select Shift:</label>
+                <select name="shift_no">
+                    <option value=""></option>
+                    {% for i in range(shifts | length )%}
+                    <option value={{shifts[i].shift_no}}>{{shifts[i].work_days}} {{shifts[i].work_hours}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <br>
+                <label for="cert">Select Certification:</label>
+                <select name="cert_no">
+                    {% for i in range(certs | length )%}
+                    <option value={{certs[i].cert_no}}>{{certs[i].cert_name}}</option>
+                    {% endfor %}
                 </select>
             </div>
             <br>
-            <!-- button -->
             <input type="submit" value="Submit" class="btn" />
 
         </form>

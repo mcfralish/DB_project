@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,        initial-scale=1.0" content-"ie=edge">
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <title>Shift Form</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+
+        <form action="/handle_form" method="POST">
+            <div class="form-group">
+                <h3>Add Shift Form</h3>
+                <input type="hidden" name="type" value="shift" />
+                <label for="thelist">Work days:</label><br>
+                <input type="checkbox" id="Sunday" name="Sunday" value="Sunday">
+                <label for="Sunday">Sunday</label><br>
+                <input type="checkbox" id="Monday" name="Monday" value="Monday">
+                <label for="Monday">Monday</label><br>
+                <input type="checkbox" id="Tuesday" name="Tuesday" value="Tuesday">
+                <label for="Tuesday">Tuesday</label><br>
+                <input type="checkbox" id="Wednesday" name="Wednesday" value="Wednesday">
+                <label for="Wednesday">Wednesday</label><br>
+                <input type="checkbox" id="Thursday" name="Thursday" value="Thursday">
+                <label for="Thursday">Thursday</label><br>
+                <input type="checkbox" id="Friday" name="Friday" value="Friday">
+                <label for="Friday">Friday</label><br>
+                <input type="checkbox" id="Saturday" name="Saturday" value="Saturday">
+                <label for="Saturday">Saturday</label><br>
+                <br>
+                <label for="work_hours">Select Hours: </label>
+                <select name="work_hours" id="work_hours">
+                    <option value="First Shift">First Shift</option>
+                    <option value="Second Shift">Second Shift</option>
+                    <option value="Third Shift">Third Shift</option>
+                </select>
+                <br>
+            </div>
+            <br>
+            <input type="submit" value="Submit" class="btn" />
+
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,        initial-scale=1.0" content-"ie=edge">
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <title>Shift Form</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+
+        <form action="/handle_form" method="POST">
+            <div class="form-group">
+                <h3>Add Certification Form</h3>
+                <input type="hidden" name="type" value="certification" />
+                <label for="cert_name">Certification Name:</label>
+                <input type="text" name="cert_name" placeholder="M.D., R.N., etc" />
+                <label for="pay">Hourly Rate:</label>
+                <input type="number" min="0.01" step="0.01" max="2500" name="pay" value="50.00" />
+                <br>
+                <br>
+            </div>
+            <br>
+            <input type="submit" value="Submit" class="btn" />
+
+        </form>
+    </div>
+</body>
+
+</html>
