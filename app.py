@@ -266,6 +266,18 @@ def handle_admin():
 @app.route("/manager", methods=["GET", "POST"])
 def manager():
 
+    if request.method == "POST":
+        data = request.form
+
+        if data["action"] == "assign_task":
+            assign = AssignedTask(
+                requesting_pt=data["pt_no"],
+                task_no=data["task_no"],
+                assigned_caregiver=data["emp_no"],
+            )
+            db.session.add(assign)
+            db.session.commit()
+
     manager = Employee.query.filter_by(login_id=current_user.id).first()
     dep = Department.query.filter_by(dept_no=manager.dept_no).first()
     certs = Certification.query.all()
@@ -279,20 +291,40 @@ def manager():
         if task.assigned_caregiver != None:
             assigned_tasks.append(task)
 
-    unassigned_tasks.sort(key=lambda x: Task.query.filter_by(task_no=x.task_no).first())
-    assigned_tasks.sort(key=lambda x: Task.query.filter_by(task_no=x.task_no).first())
+    unassigned_tasks.sort(
+        key=lambda x: Task.query.filter_by(task_no=x.task_no).first().priority
+    )
+    assigned_tasks.sort(
+        key=lambda x: Task.query.filter_by(task_no=x.task_no).first().priority
+    )
 
-    if request.method == "POST":
-        data = request.form
+    unassigned_list = []
+    assigned_list = []
 
-        if data["action"] == "assign_task":
-            assign = AssignedTask(
-                requesting_pt=data["pt_no"],
-                task_no=data["task_no"],
-                assigned_caregiver=data["emp_no"],
-            )
-            db.session.add(assign)
-            db.session.commit()
+    for i in range(len(unassigned_tasks)):
+        task_tuple = (
+            Task.query.filter_by(task_no=unassigned_tasks[i].task_no).first(),
+            Patient.query.filter_by(
+                patient_no=unassigned_tasks[i].requesting_pt
+            ).first(),
+            unassigned_tasks[i].at_no,
+        )
+
+        if task_tuple[1].dept_no == dep.dept_no:
+            unassigned_list.append(task_tuple)
+
+    for i in range(len(assigned_tasks)):
+        task_tuple = (
+            Task.query.filter_by(task_no=assigned_tasks[i].task_no).first(),
+            Patient.query.filter_by(patient_no=assigned_tasks[i].requesting_pt).first(),
+            Employee.query.filter_by(
+                empl_no=assigned_tasks[i].assigned_caregiver
+            ).first(),
+            assigned_tasks[i].at_no,
+        )
+
+        if task_tuple[1].dept_no == dep.dept_no:
+            assigned_list.append(task_tuple)
 
     return render_template(
         "management.html",
@@ -302,8 +334,8 @@ def manager():
         dep_emps=dep_emps,
         certs=certs,
         tasks=tasks,
-        unassigned_tasks=unassigned_tasks,
-        assigned_tasks=assigned_tasks,
+        unassigned_list=unassigned_list,
+        assigned_list=assigned_list,
     )
 
 
