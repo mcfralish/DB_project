@@ -43,8 +43,8 @@ class Certification(db.Model, Base):
     cert_no = db.Column(db.Integer, primary_key=True)
     cert_name = db.Column(db.String(20), nullable=False)
     pay = db.Column(db.Float, nullable=False)
+    clearance = db.Column(db.Integer, nullable=False)
     qualified_emloyees = relationship("Employee")
-    qualified_tasks = relationship("Task")
 
 
 class Employee(db.Model, Base):
@@ -88,11 +88,11 @@ class Visitor(db.Model, Base):
 class Task(db.Model, Base):
     task_no = db.Column(db.Integer, primary_key=True)
     task_name = db.Column(db.String(200), nullable=False)
-    required_cert = db.Column(db.Integer, ForeignKey(Certification.cert_no))
     priority = db.Column(db.Integer, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     required = db.Column(db.Boolean, nullable=False)
     isMedicine = db.Column(db.Boolean, nullable=False)
+    clearance = db.Column(db.Integer, nullable=False)
     recurring = db.Column(db.Boolean, nullable=False)
     frequency = db.Column(db.Integer)
     tasks_assigned = relationship("AssignedTask")

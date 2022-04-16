@@ -20,16 +20,16 @@
 </head>
 
 <body>
-    <div class="container">
-
+    <div class="header">
         <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
         <h1>{{dep.dept_name}}</h1>
         <h2>Welcome {{manager.first_name}} {{manager.last_name}} {{certs[manager.cert_no - 1].cert_name}}</h2>
     </div>
-    <form action="/manager" method="POST">
-        <div class="form">
+    <div class="assign_task">
+        <form action="/manager" method="POST">
             <fieldset>
-                <legend>Department Employees:</legend>
+                <legend>Assign Task:</legend>
+                <label>Department Employees:</label>
                 <!-- <select id="thelist" name="emp_no" size={{dep_emps | length }}> -->
                 <input type="hidden" name="action" value="assign_task" />
                 <select id="thelist" name="emp_no">
@@ -39,7 +39,7 @@
                     {% endfor %}
                 </select>
                 <br>
-                <legend>Department Patients:</legend>
+                <label>Department Patients:</label>
                 <!-- <select id="thelist" name="pt_no" size={{dep_pts | length }}> -->
                 <select id="thelist" name="pt_no">
                     {% for i in range(dep_pts | length) %}
@@ -48,7 +48,7 @@
                     {% endfor %}
                 </select>
                 <br>
-                <legend>Tasks:</legend>
+                <label>Tasks:</label>
                 <!-- <select id="thelist" name="tasn_no" size={{tasks | length }}> -->
                 <select id="thelist" name="task_no">
                     {% for i in range(tasks | length) %}
@@ -56,59 +56,55 @@
                     {% endfor %}
                 </select>
                 <br>
-                <input type="submit" value="Submit" class="btn" />
+                <input type="submit" value="Assign Task" class="btn" />
                 <br>
                 <br>
             </fieldset>
             <br>
-        </div>
-    </form>
-    <fieldset>
-        <legend>Unassigned Tasks:</legend>
-        <table>
-            <tr>
-                <th>Task</th>
-                <th>Patient's Name</th>
-                <th>Assigned Employee</th>
-                <th>Rating</th>
-            </tr>
-            {% for i in range(unassigned_tasks| length)%}
-            <tr>
-                <td>Task 1</td>
-                <td>Patient B</td>
-                <td>Employee B</td>
-                <td>9</td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <td>Task 1</td>
-                <td>Patient B</td>
-                <td>Employee B</td>
-                <td>9</td>
-            </tr>
-            <tr>
-                <td>Task 2</td>
-                <td>Patient C</td>
-                <td>Employee D</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>Task A</td>
-                <td>Patient B</td>
-                <td>Null</td>
-                <td>Null</td>
-            </tr>
-            <tr>
-                <td>Task C</td>
-                <td>Patient D</td>
-                <td>Employee A</td>
-                <td>8</td>
-            </tr>
-        </table>
-        <br>
-    </fieldset>
+        </form>
     </div>
-    </form>
+    <div class="unassigned">
+        <fieldset>
+            <legend>Unassigned Tasks:</legend>
+            <table>
+                <tr>
+                    <th>Task</th>
+                    <th>Patient's Name</th>
+                    <th>Priority</th>
+                </tr>
+                {% for i in range(unassigned_list| length)%}
+                <tr>
+                    <td>{{unassigned_list[i][0].task_name}}</td>
+                    <td>{{unassigned_list[i][1].last_name}}, {{unassigned_list[i][1].first_name}}</td>
+                    <td>{{unassigned_list[i][0].priority}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+        </fieldset>
+    </div>
+    <div class="assigned">
+        <fieldset>
+            <legend>Assigned Tasks:</legend>
+            <table>
+                <tr>
+                    <th>Task</th>
+                    <th>Patient's Name</th>
+                    <th>Caregiver's Name</th>
+                    <th>Priority</th>
+                </tr>
+                {% for i in range(assigned_list| length)%}
+                <tr>
+                    <td>{{assigned_list[i][0].task_name}}</td>
+                    <td>{{assigned_list[i][1].last_name}}, {{assigned_list[i][1].first_name}}</td>
+                    <td>{{assigned_list[i][2].last_name}}, {{assigned_list[i][2].first_name}}
+                        {{certs[assigned_list[i][2].cert_no - 1].cert_name}}</td>
+                    <td>{{assigned_list[i][0].priority}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+        </fieldset>
     </div>
 </body>
 

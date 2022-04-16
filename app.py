@@ -190,7 +190,9 @@ def handle_admin():
         )
 
     if data["type"] == "certification":
-        new = Certification(cert_name=data["cert_name"], pay=data["pay"])
+        new = Certification(
+            cert_name=data["cert_name"], pay=data["pay"], clearance=data["clearance"]
+        )
 
     if data["type"] == "employee":
         new_user = Users()
@@ -236,11 +238,11 @@ def handle_admin():
     if data["type"] == "task":
         new = Task(
             task_name=data["task_name"],
-            required_cert=int(data["required_cert"]),
             priority=int(data["priority"]),
             duration=int(data["duration"]),
             required=False,
             isMedicine=False,
+            clearance=data["clearance"],
             recurring=False,
         )
 
@@ -255,6 +257,10 @@ def handle_admin():
 
         if data["frequency"] != "":
             new.frequency = int(data["frequency"])
+
+        if (new.recurring == False) and (new.frequency != None):
+            new = None
+            flash("May not include frequency on non-recurring tasks.")
 
     if new:
         db.session.add(new)
@@ -272,15 +278,6 @@ def manager():
     tasks = Task.query.all()
     dep_pts = Patient.query.filter_by(dept_no=dep.dept_no).all()
     dep_emps = Employee.query.all()
-    unassigned_tasks = AssignedTask.query.filter_by(assigned_caregiver=None).all()
-    all_tasks = AssignedTask.query.all()
-    assigned_tasks = []
-    for task in all_tasks:
-        if task.assigned_caregiver != None:
-            assigned_tasks.append(task)
-
-    unassigned_tasks.sort(key=lambda x: Task.query.filter_by(task_no=x.task_no).first())
-    assigned_tasks.sort(key=lambda x: Task.query.filter_by(task_no=x.task_no).first())
 
     if request.method == "POST":
         data = request.form
@@ -291,8 +288,68 @@ def manager():
                 task_no=data["task_no"],
                 assigned_caregiver=data["emp_no"],
             )
-            db.session.add(assign)
-            db.session.commit()
+
+            caregiver_clearance = (
+                Certification.query.filter_by(
+                    cert_no=Employee.query.filter_by(empl_no=assign.assigned_caregiver)
+                    .first()
+                    .cert_no
+                )
+                .first()
+                .clearance
+            )
+
+            required_clearance = (
+                Task.query.filter_by(task_no=assign.task_no).first().clearance
+            )
+
+            if caregiver_clearance <= required_clearance:
+                db.session.add(assign)
+                db.session.commit()
+            else:
+                flash("Caregiver does not meet required clearance.")
+
+    unassigned_tasks = AssignedTask.query.filter_by(assigned_caregiver=None).all()
+    all_tasks = AssignedTask.query.all()
+    assigned_tasks = []
+    for task in all_tasks:
+        if task.assigned_caregiver != None:
+            assigned_tasks.append(task)
+
+    unassigned_tasks.sort(
+        key=lambda x: Task.query.filter_by(task_no=x.task_no).first().priority
+    )
+    assigned_tasks.sort(
+        key=lambda x: Task.query.filter_by(task_no=x.task_no).first().priority
+    )
+
+    unassigned_list = []
+    assigned_list = []
+
+    for i in range(len(unassigned_tasks)):
+        task_tuple = (
+            Task.query.filter_by(task_no=unassigned_tasks[i].task_no).first(),
+            Patient.query.filter_by(
+                patient_no=unassigned_tasks[i].requesting_pt
+            ).first(),
+            unassigned_tasks[i].at_no,
+        )
+
+        if task_tuple[1].dept_no == dep.dept_no:
+            unassigned_list.append(task_tuple)
+
+    for i in range(len(assigned_tasks)):
+        task_tuple = (
+            Task.query.filter_by(task_no=assigned_tasks[i].task_no).first(),
+            Patient.query.filter_by(patient_no=assigned_tasks[i].requesting_pt).first(),
+            Employee.query.filter_by(
+                empl_no=assigned_tasks[i].assigned_caregiver
+            ).first(),
+            assigned_tasks[i].at_no,
+        )
+
+        if task_tuple[1].dept_no == dep.dept_no:
+            assigned_list.append(task_tuple)
 
     return render_template(
         "management.html",
@@ -302,13 +359,52 @@ def manager():
         dep_emps=dep_emps,
         certs=certs,
         tasks=tasks,
-        unassigned_tasks=unassigned_tasks,
-        assigned_tasks=assigned_tasks,
+        unassigned_list=unassigned_list,
+        assigned_list=assigned_list,
     )
 
 
-# @app.route("/patient", methods=["GET", "POST"])
-# def patient():
+@app.route("/patient", methods=["GET", "POST"])
+def patient():
+
+    if request.method == "POST":
+        data = request.form
+        requested = AssignedTask(requesting_pt=data["pt_no"], task_no=data["task_no"])
+        db.session.add(requested)
+        db.session.commit()
+
+    pt = Patient.query.filter_by(login_id=current_user.id).first()
+    dep = Department.query.filter_by(dept_no=pt.dept_no).first()
+    certs = Certification.query.all()
+    tasks = Task.query.all()
+    task_list = []
+    for task in tasks:
+        if task.required == False:
+            task_list.append(task)
+
+    my_tasks = AssignedTask.query.filter_by(requesting_pt=pt.patient_no).all()
+    requested = []
+    assigned = []
+
+    for task in my_tasks:
+        if task.assigned_caregiver == None:
+            requested.append(Task.query.filter_by(task_no=task.task_no).first())
+        else:
+            task_tuple = (
+                Task.query.filter_by(task_no=task.task_no),
+                Employee.query.filter_by(empl_no=task.assigned_caregiver),
+            )
+            assigned.append(task_tuple)
+
+    return render_template(
+        "patient.html",
+        certs=certs,
+        pt=pt,
+        dep=dep,
+        task_list=task_list,
+        requested=requested,
+        assigned=assigned,
+    )
 
 
 if __name__ == "__main__":
