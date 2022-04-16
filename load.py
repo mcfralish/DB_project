@@ -4,7 +4,6 @@ from dotenv import load_dotenv, find_dotenv
 from models import (
     Users,
     db,
-    assigned_task_table,
     Department,
     Shift,
     Certification,
@@ -97,7 +96,6 @@ def index():
         admission_date=datetime.date(2020, 5, 17),
         login_id=4,
         dept_no=1,
-        caretaker_nos=[],
     )
     pt2 = Patient(
         first_name="Regina",
@@ -108,7 +106,38 @@ def index():
         admission_date=datetime.date(2020, 5, 17),
         login_id=5,
         dept_no=1,
-        caretaker_nos=[],
+    )
+
+    task1 = Task(
+        task_name="Initial Assessment",
+        required_cert=1,
+        priority=1,
+        duration=60,
+        required=True,
+        isMedicine=False,
+        recurring=False,
+    )
+
+    task2 = Task(
+        task_name="Give Bath",
+        required_cert=3,
+        priority=3,
+        duration=60,
+        required=True,
+        isMedicine=False,
+        recurring=True,
+        frequency=24,
+    )
+
+    task3 = Task(
+        task_name="Give Pain Meds",
+        required_cert=2,
+        priority=1,
+        duration=15,
+        required=True,
+        isMedicine=True,
+        recurring=True,
+        frequency=6,
     )
 
     db.session.add(dept)
@@ -126,6 +155,9 @@ def index():
     db.session.add(emp3)
     db.session.add(pt1)
     db.session.add(pt2)
+    db.session.add(task1)
+    db.session.add(task2)
+    db.session.add(task3)
     db.session.commit()
 
     return render_template("index.html")
