@@ -15,22 +15,26 @@
 
         <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
 
-        <form action="/submit" method="POST">
+        <form action="/handle_form" method="POST">
             <div class="form-group">
                 <h3>Visitor Form</h3>
-                <input type="text" name="first_name" placeholder="First Name" />
-                <input type="text" name="last_name" placeholder="Last Name" />
-                <input type="text" name="relationship" placeholder="Relationship" />
-                <label for="thelist">Select patient:</label>
-                <select id="thelist" size="4">
-                    <option value="1">Patient 1</option>
-                    <option value="2">Patient 2</option>
-                    <option value="3">Patient 3</option>
-                    <option value="4">Patient 4</option>
+                <input type="hidden" name="type" value="visitor" />
+                <input type="text" name="first_name" placeholder="First Name" required />
+                <br>
+                <br>
+                <input type="text" name="last_name" placeholder="Last Name" required />
+                <br>
+                <br>
+                <input type="text" name="association" placeholder="Relationship" required />
+                <br>
+                <br>
+                <label for="pt">Select Patient Visiting:</label>
+                <br>
+                <select name="visiting_pt" id="pt" required>
+                    {% for i in range(pts | length )%}
+                    <option value={{pts[i].patient_no}}>{{pts[i].last_name}}, {{pts[i].first_name}}</option>
+                    {% endfor %}
                 </select>
-
-                <label for="visit_start">Visitation date/time:</label>
-                <input type="datetime-local" id="visit_start" name="visit_start" min="00:00" max="24:00" required>
                 <br>
             </div>
             <br>

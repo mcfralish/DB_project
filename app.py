@@ -1,7 +1,6 @@
 # https://stackoverflow.com/questions/22364551/creating-flask-form-with-selects-from-more-than-one-table
 # https://docs.sqlalchemy.org/en/14/core/type_basics.html#sqlalchemy.types.Time
 # last_updated = db.Column(db.DateTime, default=datetime.datetime.now())
-from hashlib import new
 import os
 from flask import Flask, flash, render_template, redirect, request, url_for
 from flask_login import (
@@ -180,7 +179,7 @@ def admin():
 
         if request.form.get("visitor"):
             pts = Patient.query.all()
-            return render_template("vistor_form.html", pts=pts)
+            return render_template("visitor_form.html", pts=pts)
 
         if request.form.get("task"):
             certs = Certification.query.all()
@@ -196,6 +195,8 @@ def admin():
 def handle_form():
     data = request.form
     keys = data.keys()
+    print(data)
+    print("Required as bool", bool(data["required"]))
 
     if data["type"] == "department":
         new = Department(
@@ -262,7 +263,7 @@ def handle_form():
             caretaker_no=int(data["caretaker_no"]),
         )
 
-    if data["type"] == "vistor":
+    if data["type"] == "visitor":
         new = Visitor(
             first_name=data["first_name"],
             last_name=data["last_name"],
@@ -272,18 +273,31 @@ def handle_form():
 
     if data["type"] == "task":
         new = Task(
+            task_name=data["task_name"],
             required_cert=int(data["required_cert"]),
-            task_time=data["task_time"],
             priority=int(data["priority"]),
             duration=int(data["duration"]),
-            required=bool(data["required"]),
-            isMedicine=bool(data["isMedicine"]),
-            recurring=bool(data["recurring"]),
-            frequency=int(data["frequency"]),
+            required=False,
+            isMedicine=False,
+            recurring=False,
         )
 
-    db.session.add(new)
-    db.session.commit()
+        if data["required"] == "True":
+            new.required = True
+
+        if data["isMedicine"] == "True":
+            new.isMedicine = True
+
+        if data["recurring"] == "True":
+            new.recurring = True
+
+        if data["frequency"] != "":
+            new.frequency = int(data["frequency"])
+
+    if new:
+        db.session.add(new)
+        db.session.commit()
+
     return redirect(url_for("admin"))
 
 

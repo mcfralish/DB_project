@@ -92,5 +92,5 @@ class Task(db.Model, Base):
     duration = db.Column(db.Integer, nullable=False)
     required = db.Column(db.Boolean, nullable=False)
     isMedicine = db.Column(db.Boolean, nullable=False)
-    recurring = db.Column(db.Boolean)
+    recurring = db.Column(db.Boolean, nullable=False)
     frequency = db.Column(db.Integer)

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,        initial-scale=1.0" content-"ie=edge">
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <title>Task Form</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+
+        <form action="/handle_form" method="POST">
+            <div class="form-group">
+                <h3>Task Form</h3>
+                <input type="hidden" name="type" value="task" />
+                <input type="text" id="task_name" name="task_name" placeholder="Task name" required />
+                <br>
+                <br>
+                <select name="required_cert" id="cert" required>
+                    {% for i in range(certs | length )%}
+                    <option value={{certs[i].cert_no}}>{{certs[i].cert_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <br>
+                <label for="priority">Priority:</label>
+                <input type="number" name="priority" value="5" max="10" min="1" required />
+                <br>
+                <br>
+                <label for="duration">Duration:</label>
+                <input type="number" id="duration" name="duration" min="0" max="120" placeholder="in mins" required>
+                <br>
+                <br>
+                <label for="required">Required:</label>
+                <input type="radio" name="required" value=True /> Yes
+                <input type="radio" name="required" value=False /> No
+                <br>
+                <br>
+                <label for="isMedicine">Does this task require administering medication?:</label>
+                <br>
+                <input type="radio" name="isMedicine" value=True /> Yes
+                <input type="radio" name="isMedicine" value=False /> No
+                <br>
+                <br>
+                <label for="recurring">Recurring:</label>
+                <input type="radio" name="recurring" value=True /> Yes
+                <input type="radio" name="recurring" value=False /> No
+                <br>
+                <br>
+                <label for="Frequency">Frequency:</label>
+                <input type="number" name="frequency" min="0" max="48" placeholder="in hours" />
+            </div>
+            <br>
+            <input type="submit" value="Submit" class="btn" />
+
+        </form>
+
+    </div>
+</body>
+
+</html>
