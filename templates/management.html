@@ -23,60 +23,117 @@
     <div class="container">
 
         <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
-        <form action="/submit" method="POST">
+        <h1>{{dep.dept_name}}</h1>
+        <!-- <form action="/manager" method="POST">
             <div class="form">
                 <fieldset>
-                    <legend>All Employees:</legend>
-                    <select id="thelist" size="4">
-                        <option value="1">Employee A</option>
-                        <option value="2">Employee B</option>
-                        <option value="3">Employee C</option>
-                        <option value="4">Employee D</option>
+                    <legend>Assign Staff:</legend>
+                    <input type="hidden" name="action" value="assign_staff" />
+                    <label for="pt">Select Patient:</label>
+                    <select name="pt_no" id="pt">
+                        {% for i in range(dep_pts | length) %}
+                        <option value={{dep_pts[i].patient_no}}>{{dep_pts[i].last_name}}, {{dep_pts[i].first_name}}
+                        </option>
+                        {% endfor%}
+                    </select>
+                    <label for="nurse">Select Nurse:</label>
+                    <select name="nurse_no" id="nurse">
+                        {% for i in range(dep_nurses | length) %}
+                        <option value={{dep_nurses[i].empl_no}}>{{dep_nurses[i].last_name}},
+                            {{dep_nurses[i].first_name}} {{certs[dep_nurses[i].cert_no - 1].cert_name}}
+                        </option>
+                        {% endfor%}
+                    </select>
+                    <label for="doc">Select Physician:</label>
+                    <select name="doc_no" id="doc">
+                        {% for i in range(dep_docs | length) %}
+                        <option value={{dep_docs[i].empl_no}}>{{dep_docs[i].last_name}},
+                            {{dep_docs[i].first_name}} {{certs[dep_docs[i].cert_no - 1].cert_name}}
+                        </option>
+                        {% endfor%}
+                    </select>
+                    <label for="cna">Select CNA:</label>
+                    <select name="cna_no" id="cna">
+                        {% for i in range(dep_cnas | length) %}
+                        <option value={{dep_cnas[i].empl_no}}>{{dep_cnas[i].last_name}},
+                            {{dep_cnas[i].first_name}} {{certs[dep_cnas[i].cert_no - 1].cert_name}}
+                        </option>
+                        {% endfor%}
                     </select>
                     <br>
-                    <button type="button">Assign a task</button>
-                    <br>
-                    <br>
-                </fieldset>
+                    <input type="submit" value="Submit" class="btn" />
+                </fieldset> -->
+    </div>
+    </form>
+    <form action="/manager" method="POST">
+        <div class="form">
+            <fieldset>
+                <legend>Department Employees:</legend>
+                <select id="thelist" size={{dep_emps | length }}>
+                    {% for i in range(dep_emps | length) %}
+                    <option value={{dep_emps[i].emp_no}}>{{dep_emps[i].last_name}}, {{dep_emps[i].first_name}}
+                        {{certs[dep_emps[i].cert_no - 1].cert_name}}</option>
+                    {% endfor %}
+                </select>
                 <br>
-                <fieldset>
-                    <legend>All Tasks:</legend>
-                    <table>
-                        <tr>
-                            <th>Task</th>
-                            <th>Patient's Name</th>
-                            <th>Assigned Employee</th>
-                            <th>Rating</th>
-                        </tr>
-                        <tr>
-                            <td>Task 1</td>
-                            <td>Patient B</td>
-                            <td>Employee B</td>
-                            <td>9</td>
-                        </tr>
-                        <tr>
-                            <td>Task 2</td>
-                            <td>Patient C</td>
-                            <td>Employee D</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td>Task A</td>
-                            <td>Patient B</td>
-                            <td>Null</td>
-                            <td>Null</td>
-                        </tr>
-                        <tr>
-                            <td>Task C</td>
-                            <td>Patient D</td>
-                            <td>Employee A</td>
-                            <td>8</td>
-                        </tr>
-                    </table>
-                    <br>
-                </fieldset>
-            </div>
-        </form>
+                <legend>Department Patients:</legend>
+                <select id="thelist" size={{dep_pts | length }}>
+                    {% for i in range(dep_pts | length) %}
+                    <option value={{dep_pts[i].patient_no}}>{{dep_pts[i].last_name}}, {{dep_pts[i].first_name}}
+                    </option>
+                    {% endfor %}
+                </select>
+                <br>
+                <legend>Tasks:</legend>
+                <select id="thelist" size={{tasks | length }}>
+                    {% for i in range(tasks | length) %}
+                    <option value={{tasks[i].task_no}}>{{tasks[i].task_name}} {{tasks[i].priority}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <button type="button">Assign a task</button>
+                <br>
+                <br>
+            </fieldset>
+            <br>
+            <fieldset>
+                <legend>All Tasks:</legend>
+                <table>
+                    <tr>
+                        <th>Task</th>
+                        <th>Patient's Name</th>
+                        <th>Assigned Employee</th>
+                        <th>Rating</th>
+                    </tr>
+                    <tr>
+                        <td>Task 1</td>
+                        <td>Patient B</td>
+                        <td>Employee B</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td>Task 2</td>
+                        <td>Patient C</td>
+                        <td>Employee D</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>Task A</td>
+                        <td>Patient B</td>
+                        <td>Null</td>
+                        <td>Null</td>
+                    </tr>
+                    <tr>
+                        <td>Task C</td>
+                        <td>Patient D</td>
+                        <td>Employee A</td>
+                        <td>8</td>
+                    </tr>
+                </table>
+                <br>
+            </fieldset>
+        </div>
+    </form>
     </div>
 </body>
 

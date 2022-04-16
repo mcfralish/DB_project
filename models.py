@@ -41,7 +41,7 @@ class Shift(db.Model, Base):
 
 class Certification(db.Model, Base):
     cert_no = db.Column(db.Integer, primary_key=True)
-    cert_name = db.Column(db.String(5), nullable=False)
+    cert_name = db.Column(db.String(20), nullable=False)
     pay = db.Column(db.Float, nullable=False)
     qualified_emloyees = relationship("Employee")
     qualified_tasks = relationship("Task")
@@ -60,6 +60,7 @@ class Employee(db.Model, Base):
     dept_no = db.Column(db.Integer, ForeignKey(Department.dept_no), nullable=False)
     shift_no = db.Column(db.Integer, ForeignKey(Shift.shift_no))
     cert_no = db.Column(db.Integer, ForeignKey(Certification.cert_no), nullable=False)
+    taks_assigned = relationship("AssignedTask")
 
 
 class Patient(db.Model, Base):
@@ -72,8 +73,9 @@ class Patient(db.Model, Base):
     admission_date = db.Column(db.String(200), nullable=False)
     login_id = db.Column(Integer, ForeignKey(Users.id), nullable=False)
     dept_no = db.Column(db.Integer, ForeignKey(Department.dept_no), nullable=False)
-    caretaker_no = db.Column(db.Integer, ForeignKey(Employee.empl_no), nullable=False)
+    caretaker_nos = db.Column(db.ARRAY(db.Integer, ForeignKey(Employee.empl_no)))
     visitors = relationship("Visitor")
+    requested_tasks = relationship("AssignedTask")
 
 
 class Visitor(db.Model, Base):
@@ -86,11 +88,20 @@ class Visitor(db.Model, Base):
 
 class Task(db.Model, Base):
     task_no = db.Column(db.Integer, primary_key=True)
-    required_cert = db.Column(db.Integer, ForeignKey(Certification.cert_no))
     task_name = db.Column(db.String(200), nullable=False)
+    required_cert = db.Column(db.Integer, ForeignKey(Certification.cert_no))
     priority = db.Column(db.Integer, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     required = db.Column(db.Boolean, nullable=False)
     isMedicine = db.Column(db.Boolean, nullable=False)
     recurring = db.Column(db.Boolean, nullable=False)
     frequency = db.Column(db.Integer)
+    tasks_assigned = relationship("AssignedTask")
+
+
+class AssignedTask(db.Model, Base):
+    requesting_pt = db.Column(
+        db.Integer, ForeignKey(Patient.patient_no), primary_key=True
+    )
+    task_no = db.Column(db.Integer, ForeignKey(Task.task_no), primary_key=True)
+    assigned_caregiver = db.Column(db.Integer, ForeignKey(Employee.empl_no))
