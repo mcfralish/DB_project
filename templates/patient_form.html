@@ -14,7 +14,7 @@
     <div class="container">
 
         <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
-        <form action="/handle_form" method="POST">
+        <form action="/handle_admin" method="POST">
             <div class="form-group">
                 <h3>Patient Form</h3>
                 <input type="hidden" name="type" value="patient" />
@@ -51,7 +51,7 @@
                     <option value={{depts[i].dept_no}}>{{depts[i].dept_name}}</option>
                     {% endfor %}
                 </select>
-                <br>
+                <!-- <br>
                 <br>
                 <label for="caretaker">Select Caretaker:</label>
                 <select name="caretaker_no" id="caretaker">
@@ -59,7 +59,7 @@
                     <option value={{emps[i].empl_no}}>{{emps[i].last_name}}, {{emps[i].first_name}}
                         {{certs[emps[i].cert_no - 1].cert_name}}</option>
                     {% endfor %}
-                </select>
+                </select> -->
             </div>
             <br>
             <input type="submit" value="Submit" class="btn" />

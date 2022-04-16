@@ -1,7 +1,6 @@
 # https://stackoverflow.com/questions/22364551/creating-flask-form-with-selects-from-more-than-one-table
 # https://docs.sqlalchemy.org/en/14/core/type_basics.html#sqlalchemy.types.Time
 # last_updated = db.Column(db.DateTime, default=datetime.datetime.now())
-from hashlib import new
 import os
 from flask import Flask, flash, render_template, redirect, request, url_for
 from flask_login import (
@@ -23,6 +22,7 @@ from models import (
     Patient,
     Visitor,
     Task,
+    AssignedTask,
 )
 import datetime
 
@@ -48,43 +48,6 @@ def load_user(user_id):
     return Users.query.get(int(user_id))
 
 
-@app.route("/add")
-def add():
-    usr = Users()
-    db.session.add(usr)
-    db.session.commit()
-
-    dept = Department(dept_name="ICU", building="Main", floor=1)
-    db.session.add(dept)
-    db.session.commit()
-
-    shift = Shift(work_days="Su M", work_hours="First Shift")
-    db.session.add(shift)
-    db.session.commit()
-
-    cert = Certification(cert_name="R.N.", pay=50.00)
-    db.session.add(cert)
-    db.session.commit()
-
-    emp = Employee(
-        status="A",
-        first_name="John",
-        last_name="Doe",
-        phone=1,
-        dob=datetime.date(2020, 5, 17),
-        gender="M",
-        hire=datetime.date(2020, 5, 17),
-        login_id=1,
-        dept_no=1,
-        cert_no=1,
-    )
-
-    db.session.add(emp)
-    db.session.commit()
-
-    return redirect(url_for("index"))
-
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Renders index page"""
@@ -102,7 +65,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["POST"])
 def login():
     """Renders login page"""
     if request.method == "POST":
@@ -114,7 +77,7 @@ def login():
             if emp and emp.status == "A":
                 user = Users.query.filter_by(id=emp.login_id).first()
                 login_user(user)
-                return render_template("admin.html")
+                return redirect(url_for("admin"))
 
             flash("That Employee Number is not associated with an admin account.")
             return render_template("index.html")
@@ -123,10 +86,11 @@ def login():
 
             id_no = int(request.form.get("management"))
             emp = Employee.query.filter_by(empl_no=id_no).first()
+            emps = Employee.query.all()
             if emp and (emp.status == "A" or emp.status == "M"):
                 user = Users.query.filter_by(id=emp.login_id).first()
                 login_user(user)
-                return render_template("management.html")
+                return redirect(url_for("manager"))
 
             flash("That Employee Number is not associated with an management account.")
             return render_template("index.html")
@@ -138,12 +102,12 @@ def login():
             if patient:
                 user = Users.query.filter_by(id=patient.login_id).first()
                 login_user(user)
-                return render_template("patient.html")
+                return redirect(url_for("patient"))
 
             flash("That Patient Number cannot be found.")
             return render_template("index.html")
 
-    return render_template("index.html")
+    return redirect(url_for("index"))
 
 
 @app.route("/admin", methods=["GET", "POST"])
@@ -180,7 +144,7 @@ def admin():
 
         if request.form.get("visitor"):
             pts = Patient.query.all()
-            return render_template("vistor_form.html", pts=pts)
+            return render_template("visitor_form.html", pts=pts)
 
         if request.form.get("task"):
             certs = Certification.query.all()
@@ -192,10 +156,11 @@ def admin():
     return render_template("admin.html")
 
 
-@app.route("/handle_form", methods=["POST"])
-def handle_form():
+@app.route("/handle_admin", methods=["POST"])
+def handle_admin():
     data = request.form
     keys = data.keys()
+    print(data)
 
     if data["type"] == "department":
         new = Department(
@@ -259,10 +224,10 @@ def handle_form():
             admission_date=str(data["adm"]),
             login_id=new_user.id,
             dept_no=int(data["dept_no"]),
-            caretaker_no=int(data["caretaker_no"]),
+            caretaker_nos=[],
         )
 
-    if data["type"] == "vistor":
+    if data["type"] == "visitor":
         new = Visitor(
             first_name=data["first_name"],
             last_name=data["last_name"],
@@ -272,19 +237,80 @@ def handle_form():
 
     if data["type"] == "task":
         new = Task(
+            task_name=data["task_name"],
             required_cert=int(data["required_cert"]),
-            task_time=data["task_time"],
             priority=int(data["priority"]),
             duration=int(data["duration"]),
-            required=bool(data["required"]),
-            isMedicine=bool(data["isMedicine"]),
-            recurring=bool(data["recurring"]),
-            frequency=int(data["frequency"]),
+            required=False,
+            isMedicine=False,
+            recurring=False,
         )
 
-    db.session.add(new)
-    db.session.commit()
+        if data["required"] == "True":
+            new.required = True
+
+        if data["isMedicine"] == "True":
+            new.isMedicine = True
+
+        if data["recurring"] == "True":
+            new.recurring = True
+
+        if data["frequency"] != "":
+            new.frequency = int(data["frequency"])
+
+    if new:
+        db.session.add(new)
+        db.session.commit()
+
     return redirect(url_for("admin"))
+
+
+@app.route("/manager", methods=["GET", "POST"])
+def manager():
+
+    manager = Employee.query.filter_by(login_id=current_user.id).first()
+    dep = Department.query.filter_by(dept_no=manager.dept_no).first()
+    certs = Certification.query.all()
+    tasks = Task.query.all()
+    dep_pts = Patient.query.filter_by(dept_no=dep.dept_no).all()
+    dep_emps = Employee.query.all()
+
+    # dep_nurses = Employee.query.filter_by(
+    #     dept_no=dep.dept_no,
+    #     cert_no=Certification.query.filter_by(cert_name="R.N.").first().cert_no,
+    # ).all()
+
+    # dep_docs = Employee.query.filter_by(
+    #     dept_no=dep.dept_no,
+    #     cert_no=Certification.query.filter_by(cert_name="M.D.").first().cert_no,
+    # ).all()
+
+    # dep_cnas = Employee.query.filter_by(
+    #     dept_no=dep.dept_no,
+    #     cert_no=Certification.query.filter_by(cert_name="C.N.A.").first().cert_no,
+    # ).all()
+
+    if request.method == "POST":
+        data = request.form
+
+        if data["action"] == "assign_task":
+            pt = Patient.query.filter_by(patient_no=data["pt_no"])
+            emp = Employee.query.filter_by(emp_no=data["emp_no"])
+            task = Task.query.filter_by(task_no=data["task_no"])
+
+    return render_template(
+        "management.html",
+        manager=manager,
+        dep=dep,
+        dep_pts=dep_pts,
+        dep_emps=dep_emps,
+        certs=certs,
+        tasks=tasks,
+    )
+
+
+# @app.route("/patient", methods=["GET", "POST"])
+# def patient():
 
 
 if __name__ == "__main__":
