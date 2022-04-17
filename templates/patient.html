@@ -31,8 +31,8 @@
                 <legend>Request a Task:</legend>
                 <input type="hidden" name="pt_no" value={{pt.patient_no}} />
                 <select id="thelist" name="task_no">
-                    {% for i in range(task_list | length)%}
-                    <option value={{task_list[i].task_no}}>{{task_list[i].task_name}}</option>
+                    {% for i in range(requestable_tasks | length)%}
+                    <option value={{requestable_tasks[i].task_no}}>{{requestable_tasks[i].task_name}}</option>
                     {% endfor %}
                 </select>
                 <br>
@@ -52,7 +52,7 @@
                 </tr>
                 {% for i in range(requested | length)%}
                 <tr>
-                    <td>{{requetsted[i].task_name}}</td>
+                    <td>{{requested[i].task_name}}</td>
                 </tr>
                 {% endfor %}
             </table>
@@ -87,6 +87,27 @@
                     {% else %}
                     <td>No Frequency</td>
                     {% endif %}
+                </tr>
+                {% endfor %}
+            </table>
+        </fieldset>
+    </div>
+    <br>
+    <br>
+    <div class="Visitor List">
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>Your Approved Visitors:</legend>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Relation</th>
+                </tr>
+                {% for i in range(visitors | length)%}
+                <tr>
+                    <td>{{visitors[i].first_name}} {{visitors[i].last_name}}</td>
+                    <td>{{visitors[i].association}}</td>
                 </tr>
                 {% endfor %}
             </table>
