@@ -64,7 +64,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     """Renders login page"""
     if request.method == "POST":
@@ -109,6 +109,7 @@ def login():
     return redirect(url_for("index"))
 
 
+@login_required
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
     """Recieve input from admin to display appropriate form"""
@@ -155,6 +156,7 @@ def admin():
     return render_template("admin.html")
 
 
+@login_required
 @app.route("/handle_admin", methods=["POST"])
 def handle_admin():
     data = request.form
@@ -269,6 +271,7 @@ def handle_admin():
     return redirect(url_for("admin"))
 
 
+@login_required
 @app.route("/manager", methods=["GET", "POST"])
 def manager():
 
@@ -364,23 +367,22 @@ def manager():
     )
 
 
+@login_required
 @app.route("/patient", methods=["GET", "POST"])
 def patient():
-
-    if request.method == "POST":
-        data = request.form
-        requested = AssignedTask(requesting_pt=data["pt_no"], task_no=data["task_no"])
-        db.session.add(requested)
-        db.session.commit()
 
     pt = Patient.query.filter_by(login_id=current_user.id).first()
     dep = Department.query.filter_by(dept_no=pt.dept_no).first()
     certs = Certification.query.all()
-    tasks = Task.query.all()
-    task_list = []
-    for task in tasks:
-        if task.required == False:
-            task_list.append(task)
+    all_tasks = Task.query.all()
+
+    if request.method == "POST":
+        data = request.form
+        requested = AssignedTask(requesting_pt=pt.patient_no, task_no=data["task_no"])
+        db.session.add(requested)
+        db.session.commit()
+
+    requestable_tasks = Task.query.filter_by(required=False).all()
 
     my_tasks = AssignedTask.query.filter_by(requesting_pt=pt.patient_no).all()
     requested = []
@@ -391,19 +393,22 @@ def patient():
             requested.append(Task.query.filter_by(task_no=task.task_no).first())
         else:
             task_tuple = (
-                Task.query.filter_by(task_no=task.task_no),
-                Employee.query.filter_by(empl_no=task.assigned_caregiver),
+                Task.query.filter_by(task_no=task.task_no).first(),
+                Employee.query.filter_by(empl_no=task.assigned_caregiver).first(),
             )
             assigned.append(task_tuple)
+
+    visitors = Visitor.query.filter_by(visiting_pt=pt.patient_no).all()
 
     return render_template(
         "patient.html",
         certs=certs,
         pt=pt,
         dep=dep,
-        task_list=task_list,
+        requestable_tasks=requestable_tasks,
         requested=requested,
         assigned=assigned,
+        visitors=visitors,
     )
 
 
