@@ -12,71 +12,70 @@
 
 <body>
     <div class="container">
-
-        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
-
+        <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         <form action="/handle_admin" method="POST">
-            <div class="form-group">
-                <h3>Employee Form</h3>
-                <input type="hidden" name="type" value="employee" />
-                <label for="status">What status is this employee?</label>
-                <br>
-                <input type="radio" name="status" value="A" /> Administrator
-                <input type="radio" name="status" value="M" /> Management
-                <input type="radio" name="status" value="E" /> Employee
-                <br>
-                <br>
-                <input type="text" name="first_name" placeholder="First Name" required />
-                <br>
-                <br>
-                <input type="text" name="last_name" placeholder="Last Name" required />
-                <br>
-                <br>
-                <label for="phone">Employee's phone number:</label>
-                <br>
-                <input type="tel" id="phone" name="phone" placeholder="000-000-0000" required>
-                <br>
-                <br>
-                <label for="dob">Employee's date of birth:</label>
-                <br>
-                <input type="date" name="dob" placeholder="Employee's Date of Birth" required />
-                <br>
-                <br>
-                <label>Gender:</label>
-                <br>
-                <input type="radio" name="gender" value="M" checked /> Male
-                <input type="radio" name="gender" value="F" /> Female
-                <br>
-                <br>
-                <label for="hire">Employee's hire date:</label>
-                <br>
-                <input type="date" name="hire" placeholder="Employee's hire date" />
-                <br>
-                <br>
-                <label for="dept">Select department:</label>
-                <select name="dept_no" required>
-                    {% for i in range(depts | length )%}
-                    <option value={{depts[i].dept_no}}>{{depts[i].dept_name}}</option>
-                    {% endfor %}
-                </select>
-                <br>
-                <br>
-                <label for="dept">Select Shift:</label>
-                <select name="shift_no">
-                    <option value=""></option>
-                    {% for i in range(shifts | length )%}
-                    <option value={{shifts[i].shift_no}}>{{shifts[i].work_days}} {{shifts[i].work_hours}}</option>
-                    {% endfor %}
-                </select>
-                <br>
-                <br>
-                <label for="cert">Select Certification:</label>
-                <select name="cert_no">
-                    {% for i in range(certs | length )%}
-                    <option value={{certs[i].cert_no}}>{{certs[i].cert_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
+            <fieldset class="container">
+                <legend>Add Employee Form:</legend>
+                <div class="row">
+                    <div class="column">
+                        <input type="hidden" name="type" value="employee">
+                        <br>
+                        <label for="status">Employee's first name:</label><br>
+                        <input class="name" type="text" name="first_name" placeholder="First Name" required>
+                        <br>
+                        <label for="status">Employee's last name:</label><br>
+                        <input class="name" type="text" name="last_name" placeholder="Last Name" required>
+                        <br>
+                        <label>Gender:</label><br>
+                        <input type="radio" name="gender" value="M" checked> Male
+                        <input type="radio" name="gender" value="F"> Female
+                        <br>
+                        <br>
+                        <label for="dob">Employee's date of birth:</label>
+                        <br>
+                        <input class="selectB" type="date" name="dob" placeholder="Employee's Date of Birth" required>
+                        <br>
+                        <label for="phone">Employee's phone number:</label>
+                        <input class="selectB" type="tel" id="phone" name="phone" placeholder="000-000-0000" required>
+                        <br>
+                    </div>
+                    <div class="column">
+                        <br>
+                        <label for="status">Employee type:</label><br>
+                        <input type="radio" name="status" value="A"> Administrator<br>
+                        <input type="radio" name="status" value="M"> Management<br>
+                        <input type="radio" name="status" value="E"> Employee<br>
+                        <br>
+                        <label for="hire">Employee's hire date:</label>
+                        <br>
+                        <input class="selectB" type="date" name="hire" placeholder="Employee's hire date">
+                        <br>
+                        <label for="dept">Select department:</label>
+                        <select class="name" name="dept_no" required>
+                            {% for i in range(depts | length )%}
+                            <option value={{depts[i].dept_no}}>{{depts[i].dept_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label for="dept">Select Shift:</label>
+                        <select name="shift_no" class="shift">
+                            <option value=""></option>
+                            {% for i in range(shifts | length )%}
+                            <option value={{shifts[i].shift_no}}>{{shifts[i].work_days}} | {{shifts[i].work_hours}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label for="cert">Select Certification:</label>
+                        <select class="selectB" name="cert_no">
+                            {% for i in range(certs | length )%}
+                            <option value={{certs[i].cert_no}}>{{certs[i].cert_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                    </div>
+                </div>
+            </fieldset>
             <br>
             <input type="submit" value="Submit" class="btn" />
 

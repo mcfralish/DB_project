@@ -12,49 +12,52 @@
 
 <body>
     <div class="container">
-
-        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
-
+        <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         <form action="/handle_admin" method="POST">
-            <div class="form-group">
-                <h3>Task Form</h3>
-                <input type="hidden" name="type" value="task" />
-                <input type="text" id="task_name" name="task_name" placeholder="Task name" required />
-                <br>
-                <br>
-                <label for="priority">Priority:</label>
-                <input type="number" name="priority" value="5" max="10" min="1" required />
-                <br>
-                <br>
-                <label for="duration">Duration:</label>
-                <input type="number" id="duration" name="duration" min="0" max="120" placeholder="in mins" required>
-                <br>
-                <br>
-                <label for="required">Required:</label>
-                <input type="radio" name="required" value=True /> Yes
-                <input type="radio" name="required" value=False /> No
-                <br>
-                <br>
-                <label for="isMedicine">Does this task require administering medication?:</label>
-                <br>
-                <input type="radio" name="isMedicine" value=True /> Yes
-                <input type="radio" name="isMedicine" value=False /> No
-                <br>
-                <br>
-                <label for="clearance">What clearance level does this task require?:</label>
-                <br>
-                <input type="number" name="clearance" value="5" min="1" max="5" />
-                <br>
-                <br>
-                <label for="recurring">Recurring:</label>
-                <input type="radio" name="recurring" value=True /> Yes
-                <input type="radio" name="recurring" value=False /> No
-                <br>
-                <br>
-                <label for="Frequency">Frequency:</label>
-                <input type="number" name="frequency" min="0" max="48" placeholder="in hours" />
-            </div>
-            <br>
+            <input type="hidden" name="type" value="task" />
+            <fieldset class="container">
+                <legend>Add Visitor Form:</legend>
+                <div class="row">
+                    <br>
+                    <div class="column">
+                        <label for="pt">Task name:</label><br>
+                        <input class="name" type="text" id="task_name" name="task_name" placeholder="Task name"
+                            required>
+                        <br>
+                        <label for="priority">Priority:</label><br>
+                        <input class="numB" type="number" name="priority" value="5" max="10" min="1" required>
+                        <br>
+                        <label for="duration">Duration:</label><br>
+                        <input class="numD" type="number" id="duration" name="duration" min="0" max="120"
+                            placeholder="in mins" required>
+                        <br>
+                        <label for="required">Required:</label><br>
+                        <input type="radio" name="required" value=True /> Yes
+                        <input type="radio" name="required" value=False /> No
+                        <br>
+                        <br>
+                        <label for="isMedicine">Medication administration:</label><br>
+                        <input type="radio" name="isMedicine" value=True /> Yes
+                        <input type="radio" name="isMedicine" value=False /> No
+                        <br>
+                        <br>
+                        <label for="clearance">Level of authorization:</label>
+                        <br>
+                        <input type="number" name="clearance" value="5" min="1" max="5" />
+                        <br>
+                        <br>
+                    </div>
+                    <div class="column">
+                        <label for="recurring">Recurring:</label>
+                        <input type="radio" name="recurring" value=True /> Yes
+                        <input type="radio" name="recurring" value=False /> No
+                        <br>
+                        <br>
+                        <label for="Frequency">Frequency:</label>
+                        <input class="numD" type="number" name="frequency" min="0" max="48" placeholder="in hours" />
+                    </div>
+                    <br>
+            </fieldset>
             <input type="submit" value="Submit" class="btn" />
 
         </form>

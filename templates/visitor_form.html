@@ -12,35 +12,32 @@
 
 <body>
     <div class="container">
-
-        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
-
+        <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         <form action="/handle_admin" method="POST">
-            <div class="form-group">
-                <h3>Visitor Form</h3>
-                <input type="hidden" name="type" value="visitor" />
-                <input type="text" name="first_name" placeholder="First Name" required />
+            <fieldset class="container">
+                <legend>Add Visitor Form:</legend>
+                <div class="row">
+                    <br>
+                    <input class="name" type="hidden" name="type" value="visitor" />
+                    <label for="status">Visitor's first name:</label><br>
+                    <input class="name" type="text" name="first_name" placeholder="First Name" required />
+                    <br>
+                    <label for="status">Visitor's last name:</label><br>
+                    <input class="name" type="text" name="last_name" placeholder="Last Name" required />
+                    <br>
+                    <label for="status">Relationship to patient:</label><br>
+                    <input class="name" type="text" name="association" placeholder="Relationship" required />
+                    <br>
+                    <label for="pt">Select Patient Visiting:</label><br>
+                    <select class="name" name="visiting_pt" id="pt" required>
+                        {% for i in range(pts | length )%}
+                        <option value={{pts[i].patient_no}}>{{pts[i].last_name}}, {{pts[i].first_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
                 <br>
-                <br>
-                <input type="text" name="last_name" placeholder="Last Name" required />
-                <br>
-                <br>
-                <input type="text" name="association" placeholder="Relationship" required />
-                <br>
-                <br>
-                <label for="pt">Select Patient Visiting:</label>
-                <br>
-                <select name="visiting_pt" id="pt" required>
-                    {% for i in range(pts | length )%}
-                    <option value={{pts[i].patient_no}}>{{pts[i].last_name}}, {{pts[i].first_name}}</option>
-                    {% endfor %}
-                </select>
-                <br>
-            </div>
-            <br>
-            <!-- button -->
+            </fieldset>
             <input type="submit" value="Submit" class="btn" />
-
         </form>
 
     </div>

@@ -12,8 +12,7 @@
 
 <body>
     <div class="container">
-
-        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+        <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         <form action="/admin" method="POST">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -25,21 +24,15 @@
             {% endif %}
             {% endwith %}
             <div class="form">
-                <fieldset>
-                    <legend>Tools:</legend>
-                    <input type="submit" name="department" value="Add Department"> </input>
-                    <br>
-                    <input type="submit" name="shift" value="Add Shift"> </input>
-                    <br>
-                    <input type="submit" name="certification" value="Add Certification"> </input>
-                    <br>
-                    <input type="submit" name="employee" value="Add Employee"> </input>
-                    <br>
-                    <input type="submit" name="patient" value="Add Patient"> </input>
-                    <br>
-                    <input type="submit" name="visitor" value="Add Visitor"> </input>
-                    <br>
-                    <input type="submit" name="task" value="Add Task"> </input>
+                <fieldset class="container">
+                    <legend>Administration Tools:</legend>
+                    <input class="btn" type="submit" name="department" value="Add Department"> </input>
+                    <input class="btn" type="submit" name="shift" value="Add Schedule"> </input>
+                    <input class="btn" type="submit" name="certification" value="Add Certification"> </input>
+                    <input class="btn" type="submit" name="employee" value="Add Employee"> </input>
+                    <input class="btn" type="submit" name="patient" value="Add Patient"> </input>
+                    <input class="btn" type="submit" name="visitor" value="Add Visitor"> </input>
+                    <input class="btn" type="submit" name="task" value="Add Task"> </input>
                     <br>
                 </fieldset>
             </div>

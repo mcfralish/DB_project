@@ -12,8 +12,7 @@
 
 <body>
     <div class="container">
-
-        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+        <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul class="flashes">
@@ -26,14 +25,13 @@
         {% block body %}{% endblock %}
         <form action="/" method="POST">
             <div class="form-group">
-                <h3>Login Option:</h3>
-                <input type="radio" name="user" value="administration" /> Administration </input><br>
-                <input type="radio" name="user" value="management" /> Management </input><br>
-                <input type="radio" name="user" value="patient" /> Patient </input><br>
+                <fieldset class="container">
+                    <legend>Login Options:</legend>
+                    <input class="btn" type="submit" name="user" value="administration" /></input><br>
+                    <input class="btn" type="submit" name="user" value="management" /></input><br>
+                    <input class="btn" type="submit" name="user" value="patient" /></input><br>
+                </fieldset>
             </div>
-            <br>
-            <!-- button -->
-            <input type="submit" value="Submit" class="btn" />
         </form>
     </div>
 </body>

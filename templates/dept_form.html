@@ -12,46 +12,42 @@
 
 <body>
     <div class="container">
-
-        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
-
+        <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         <form action="/handle_admin" method="POST">
-            <div class="form-group">
-                <h3>Department Form</h3>
-                <input type="hidden" name="type" value="department"" />
-                <input type=" text" name="dept_name" placeholder="Department name" />
-                <br>
-                <br>
-                <label for="thelist">Select building:</label>
-                <select id="thelist" name="building">
-                    <option value="Main">Main</option>
-                    <option value="Annex">Annex</option>
-                    <option value="Health Pavilion">Health Pavilion</option>
-                    <option value="Trauma Center">Trauma Center</option>
-                </select>
-                <br>
-                <br>
-                <label for="thelist">Select floor:</label>
-                <select id="thelist" name="floor">
-                    <option value="1">Floor 1</option>
-                    <option value="2">Floor 2</option>
-                    <option value="3">Floor 3</option>
-                    <option value="4">Floor 4</option>
-                    <option value="4">Floor 5</option>
-                    <option value="4">Floor 6</option>
-                    <option value="4">Floor 7</option>
-                    <option value="4">Floor 8</option>
-                    <option value="4">Floor 9</option>
-                    <option value="4">Floor 10</option>
-                </select>
-                <br>
-            </div>
-            <br>
+            <fieldset class="container">
+                <legend>Add Department Form:</legend>
+                <div class="form-group">
+                    <input type="hidden" name="type" value="department"" />
+                    <label for=" thelist">Department name:</label><br>
+                    <input class="name" type="text" name="dept_name" placeholder="Department name">
+                    <br>
+                    <label for="thelist">Select building:</label>
+                    <select class="selectA" id="thelist" name="building">
+                        <option value="Main">Main</option>
+                        <option value="Annex">Annex</option>
+                        <option value="Health Pavilion">Health Pavilion</option>
+                        <option value="Trauma Center">Trauma Center</option>
+                    </select>
+                    <br>
+                    <label for="thelist">Select floor:</label>
+                    <select class="login" id="thelist" name="floor">
+                        <option value="1">Floor 1</option>
+                        <option value="2">Floor 2</option>
+                        <option value="3">Floor 3</option>
+                        <option value="4">Floor 4</option>
+                        <option value="4">Floor 5</option>
+                        <option value="4">Floor 6</option>
+                        <option value="4">Floor 7</option>
+                        <option value="4">Floor 8</option>
+                        <option value="4">Floor 9</option>
+                        <option value="4">Floor 10</option>
+                    </select>
+                    <br>
+                </div>
+            </fieldset>
             <input type="submit" value="Submit" class="btn" />
-
-        </form>
-
     </div>
+    </form>
 </body>
 
 </html>
