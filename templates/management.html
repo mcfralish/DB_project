@@ -80,12 +80,33 @@
                     <th>Task</th>
                     <th>Patient's Name</th>
                     <th>Priority</th>
+                    <th>Assign Employees</th>
+                    <th>Assign</th>
                 </tr>
                 {% for i in range(unassigned_list| length)%}
                 <tr>
                     <td>{{unassigned_list[i][0].task_name}}</td>
                     <td>{{unassigned_list[i][1].last_name}}, {{unassigned_list[i][1].first_name}}</td>
                     <td>{{unassigned_list[i][0].priority}}</td>
+                    <form action="/manager" method="POST">
+                        <td>
+                            <input type="hidden" name="action" value="assign_task" />
+                            <input type="hidden" name="pt_no" value={{unassigned_list[i][1].patient_no}} />
+                            <input type="hidden" name="task_no" value={{unassigned_list[i][0].task_no}} />
+                            <select id="thelist" name="emp_no">
+                                {% for j in range(dep_emps | length) %}
+                                <option value={{dep_emps[j].empl_no}}>
+                                    {{dep_emps[j].last_name}},
+                                    {{dep_emps[j].first_name}}
+                                    {{certs[dep_emps[j].cert_no - 1].cert_name}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="submit" value="Assign Task" />
+                        </td>
+                    </form>
                 </tr>
                 {% endfor %}
             </table>
@@ -101,6 +122,7 @@
                     <th>Patient's Name</th>
                     <th>Caregiver's Name</th>
                     <th>Priority</th>
+                    <th>Complete</th>
                 </tr>
                 {% for i in range(assigned_list| length)%}
                 <tr>
@@ -109,6 +131,13 @@
                     <td>{{assigned_list[i][2].last_name}}, {{assigned_list[i][2].first_name}}
                         {{certs[assigned_list[i][2].cert_no - 1].cert_name}}</td>
                     <td>{{assigned_list[i][0].priority}}</td>
+                    <td>
+                        <form action="/manager" method="POST">
+                            <input type="hidden" name="action" value="task_complete" />
+                            <input type="hidden" name="at_no" value={{assigned_list[i][3]}} />
+                            <input type="submit" value="Mark Complete" />
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </table>

@@ -209,7 +209,7 @@ def handle_admin():
             status=data["status"],
             first_name=data["first_name"],
             last_name=data["last_name"],
-            phone=int(data["phone"]),
+            phone=str(data["phone"]),
             dob=str(data["dob"]),
             gender=data["gender"],
             hire=str(data["hire"]),
@@ -227,7 +227,7 @@ def handle_admin():
         new = Patient(
             first_name=data["first_name"],
             last_name=data["last_name"],
-            phone=data["phone"],
+            phone=str(data["phone"]),
             dob=str(data["dob"]),
             gender=data["gender"],
             admission_date=str(data["adm"]),
@@ -294,7 +294,6 @@ def manager():
 
     if request.method == "POST":
         data = request.form
-
         cleared = False
         redundant = True
         if data["action"] == "assign_task":
@@ -334,21 +333,42 @@ def manager():
                         temp.append(dupe)
                 dupes = temp
 
+            task_request = None
             if dupes and len(dupes) > 0:
                 temp = []
                 for dupe in dupes:
                     if dupe.assigned_caregiver != None:
                         temp.append(dupe)
+                    else:
+                        task_request = dupe
                 dupes = temp
+
+            update_only = False
+            if task_request:
+                update_only = True
+                task_request.assigned_caregiver = assign.assigned_caregiver
+                assign = task_request
 
             if dupes and len(dupes) > 0:
                 flash("Someone is already working on that.")
             else:
                 redundant = False
 
-            if cleared and not redundant:
+            if cleared and update_only:
+                db.session.merge(assign)
+                db.session.commit()
+                flash("Task Assigned")
+
+            elif cleared and not redundant:
                 db.session.add(assign)
                 db.session.commit()
+                flash("Task Assigned")
+
+        if data["action"] == "task_complete":
+            completed = AssignedTask.query.filter_by(at_no=data["at_no"]).first()
+            db.session.delete(completed)
+            db.session.commit()
+            flash("Task Completed")
 
     unassigned_tasks = AssignedTask.query.filter_by(assigned_caregiver=None).all()
     all_tasks = AssignedTask.query.all()
@@ -367,26 +387,22 @@ def manager():
     unassigned_list = []
     assigned_list = []
 
-    for i in range(len(unassigned_tasks)):
+    for task in unassigned_tasks:
         task_tuple = (
-            Task.query.filter_by(task_no=unassigned_tasks[i].task_no).first(),
-            Patient.query.filter_by(
-                patient_no=unassigned_tasks[i].requesting_pt
-            ).first(),
-            unassigned_tasks[i].at_no,
+            Task.query.filter_by(task_no=task.task_no).first(),
+            Patient.query.filter_by(patient_no=task.requesting_pt).first(),
+            task.at_no,
         )
 
         if task_tuple[1].dept_no == dep.dept_no:
             unassigned_list.append(task_tuple)
 
-    for i in range(len(assigned_tasks)):
+    for task in assigned_tasks:
         task_tuple = (
-            Task.query.filter_by(task_no=assigned_tasks[i].task_no).first(),
-            Patient.query.filter_by(patient_no=assigned_tasks[i].requesting_pt).first(),
-            Employee.query.filter_by(
-                empl_no=assigned_tasks[i].assigned_caregiver
-            ).first(),
-            assigned_tasks[i].at_no,
+            Task.query.filter_by(task_no=task.task_no).first(),
+            Patient.query.filter_by(patient_no=task.requesting_pt).first(),
+            Employee.query.filter_by(empl_no=task.assigned_caregiver).first(),
+            task.at_no,
         )
 
         if task_tuple[1].dept_no == dep.dept_no:
