@@ -12,14 +12,14 @@
 
 <body>
     <div class="container">
-
-        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+        <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         <form action="/login" method="POST">
             <div class="form">
-                <fieldset>
+                <fieldset class="container">
                     <legend>Sign In:</legend>
+                    <br>
                     <label for="login">Employee ID:</label>
-                    <input type="text" id="login" name="admin"><br><br>
+                    <input class="numB" type="text" id="login" name="admin"><br><br>
                 </fieldset>
                 <!-- button -->
                 <input type="submit" value="Submit" class="btn" />
