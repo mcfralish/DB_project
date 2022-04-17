@@ -25,6 +25,15 @@
         <h1>{{dep.dept_name}}</h1>
         <h2>Welcome {{manager.first_name}} {{manager.last_name}} {{certs[manager.cert_no - 1].cert_name}}</h2>
     </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
     <div class="assign_task">
         <form action="/manager" method="POST">
             <fieldset>

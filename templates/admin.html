@@ -15,6 +15,15 @@
 
         <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
         <form action="/admin" method="POST">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
             <div class="form">
                 <fieldset>
                     <legend>Tools:</legend>
@@ -32,8 +41,6 @@
                     <br>
                     <input type="submit" name="task" value="Add Task"> </input>
                     <br>
-                    <!-- <input type="submit" name="medication" value="Add medication"> </input>
-                    <br> -->
                 </fieldset>
             </div>
         </form>

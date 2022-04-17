@@ -25,6 +25,15 @@
         <h1>{{dep.dept_name}}</h1>
         <h2>Welcome {{pt.first_name}} {{pt.last_name}}</h2>
     </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
     <div class="form">
         <form action="/patient" method="POST">
             <fieldset>
@@ -70,7 +79,7 @@
                     <th>Medication</th>
                     <th>Frequency</th>
                 </tr>
-                {% for i in range(requested | length)%}
+                {% for i in range(assigned | length)%}
                 <tr>
                     <td>{{assigned[i][0].task_name}}</td>
                     <td>{{assigned[i][1].last_name}}, {{assigned[i][1].first_name}}
