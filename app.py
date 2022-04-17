@@ -166,12 +166,15 @@ def handle_admin():
     print(data)
 
     if data["type"] == "department":
-        new = Department(
-            dept_name=data["dept_name"],
-            building=data["building"],
-            floor=int(data["floor"]),
-        )
-        flash("Department Added")
+        if data["dept_name"] != ""
+            new = Department(
+                dept_name=data["dept_name"],
+                building=data["building"],
+                floor=int(data["floor"]),
+            )
+            flash("Department Added")
+        else:
+            flash("Department must have a name.")
 
     if data["type"] == "shift":
         work_days = ""
@@ -189,61 +192,98 @@ def handle_admin():
             work_days += "F "
         if "Saturday" in keys:
             work_days += "Sa"
-        new = Shift(
-            work_days=work_days,
-            work_hours=data["work_hours"],
-        )
-        flash("Shift Added")
+        
+        if work_days != "":
+            new = Shift(
+                work_days=work_days,
+                work_hours=data["work_hours"],
+            )
+            flash("Shift Added")
+        else:
+            flash("Shift must include at least one day.")
 
     if data["type"] == "certification":
-        new = Certification(
-            cert_name=data["cert_name"], pay=data["pay"], clearance=data["clearance"]
-        )
-        flash("Certification Added")
+        if data["cert_name"] != ""
+            new = Certification(
+                cert_name=data["cert_name"], pay=data["pay"], clearance=data["clearance"]
+            )
+            flash("Certification Added")
+        else:
+            flash("Certification must have a name.")
 
     if data["type"] == "employee":
-        new_user = Users()
-        db.session.add(new_user)
-        db.session.commit()
-        new = Employee(
-            status=data["status"],
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            phone=str(data["phone"]),
-            dob=str(data["dob"]),
-            gender=data["gender"],
-            hire=str(data["hire"]),
-            login_id=new_user.id,
-            dept_no=int(data["dept_no"]),
-            shift_no=int(data["shift_no"]),
-            cert_no=int(data["cert_no"]),
-        )
-        flash("Employee Added")
+        if data["first_name"] == "":
+            flash("Employee must have a first name")
+
+        elif data["first_name"] == "":
+            flash("Employee must have a last name")
+
+        elif data["phone"] == "":
+            flash("Employee must have a phone number")
+
+        else:
+            new_user = Users()
+            db.session.add(new_user)
+            db.session.commit()
+            new = Employee(
+                status=data["status"],
+                first_name=data["first_name"],
+                last_name=data["last_name"],
+                phone=str(data["phone"]),
+                dob=str(data["dob"]),
+                gender=data["gender"],
+                hire=str(data["hire"]),
+                login_id=new_user.id,
+                dept_no=int(data["dept_no"]),
+                shift_no=int(data["shift_no"]),
+                cert_no=int(data["cert_no"]),
+            )
+            flash("Employee Added")
 
     if data["type"] == "patient":
-        new_user = Users()
-        db.session.add(new_user)
-        db.session.commit()
-        new = Patient(
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            phone=str(data["phone"]),
-            dob=str(data["dob"]),
-            gender=data["gender"],
-            admission_date=str(data["adm"]),
-            login_id=new_user.id,
-            dept_no=int(data["dept_no"]),
-        )
-        flash("Patient Added")
+        if data["first_name"] == "":
+            flash("Employee must have a first name")
+
+        elif data["first_name"] == "":
+            flash("Employee must have a last name")
+
+        elif data["phone"] == "":
+            flash("Employee must have a phone number")
+
+        else:
+            new_user = Users()
+            db.session.add(new_user)
+            db.session.commit()
+            new = Patient(
+                first_name=data["first_name"],
+                last_name=data["last_name"],
+                phone=str(data["phone"]),
+                dob=str(data["dob"]),
+                gender=data["gender"],
+                admission_date=str(data["adm"]),
+                login_id=new_user.id,
+                dept_no=int(data["dept_no"]),
+            )
+            flash("Patient Added")
 
     if data["type"] == "visitor":
-        new = Visitor(
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            association=data["association"],
-            visiting_pt=int(data["visiting_pt"]),
-        )
-        flash("Visitor Added")
+        if data["first_name"] == "":
+            flash("Visitor must have a first name")
+
+        if data["last_name"] == "":
+            flash("Visitor must have a first name")
+
+        if data["association"] == "":
+            flash("Visitor must have an association")
+
+        else:
+            new = Visitor(
+                first_name=data["first_name"],
+                last_name=data["last_name"],
+                association=data["association"],
+                visiting_pt=int(data["visiting_pt"]),
+            )
+            flash("Visitor Added")
 
     if data["type"] == "task":
         new = Task(
