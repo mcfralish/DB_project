@@ -1,5 +1,6 @@
 # https://stackoverflow.com/questions/22364551/creating-flask-form-with-selects-from-more-than-one-table
 # https://docs.sqlalchemy.org/en/14/core/type_basics.html#sqlalchemy.types.Time
+from operator import and_
 import os
 from flask import Flask, flash, render_template, redirect, request, url_for
 from flask_login import (
@@ -10,6 +11,7 @@ from flask_login import (
     logout_user,
 )
 from dotenv import load_dotenv, find_dotenv
+from sqlalchemy import and_
 from models import (
     Users,
     db,
@@ -169,6 +171,7 @@ def handle_admin():
             building=data["building"],
             floor=int(data["floor"]),
         )
+        flash("Department Added")
 
     if data["type"] == "shift":
         work_days = ""
@@ -190,11 +193,13 @@ def handle_admin():
             work_days=work_days,
             work_hours=data["work_hours"],
         )
+        flash("Shift Added")
 
     if data["type"] == "certification":
         new = Certification(
             cert_name=data["cert_name"], pay=data["pay"], clearance=data["clearance"]
         )
+        flash("Certification Added")
 
     if data["type"] == "employee":
         new_user = Users()
@@ -213,6 +218,7 @@ def handle_admin():
             shift_no=int(data["shift_no"]),
             cert_no=int(data["cert_no"]),
         )
+        flash("Employee Added")
 
     if data["type"] == "patient":
         new_user = Users()
@@ -228,6 +234,7 @@ def handle_admin():
             login_id=new_user.id,
             dept_no=int(data["dept_no"]),
         )
+        flash("Patient Added")
 
     if data["type"] == "visitor":
         new = Visitor(
@@ -236,6 +243,7 @@ def handle_admin():
             association=data["association"],
             visiting_pt=int(data["visiting_pt"]),
         )
+        flash("Visitor Added")
 
     if data["type"] == "task":
         new = Task(
@@ -263,6 +271,8 @@ def handle_admin():
         if (new.recurring == False) and (new.frequency != None):
             new = None
             flash("May not include frequency on non-recurring tasks.")
+        else:
+            flash("Task Added")
 
     if new:
         db.session.add(new)
@@ -285,6 +295,8 @@ def manager():
     if request.method == "POST":
         data = request.form
 
+        cleared = False
+        redundant = True
         if data["action"] == "assign_task":
             assign = AssignedTask(
                 requesting_pt=data["pt_no"],
@@ -307,10 +319,36 @@ def manager():
             )
 
             if caregiver_clearance <= required_clearance:
-                db.session.add(assign)
-                db.session.commit()
+                cleared = True
             else:
                 flash("Caregiver does not meet required clearance.")
+
+            dupes = AssignedTask.query.filter_by(
+                requesting_pt=assign.requesting_pt
+            ).all()
+
+            if dupes and len(dupes) > 0:
+                temp = []
+                for dupe in dupes:
+                    if dupe.task_no == int(assign.task_no):
+                        temp.append(dupe)
+                dupes = temp
+
+            if dupes and len(dupes) > 0:
+                temp = []
+                for dupe in dupes:
+                    if dupe.assigned_caregiver != None:
+                        temp.append(dupe)
+                dupes = temp
+
+            if dupes and len(dupes) > 0:
+                flash("Someone is already working on that.")
+            else:
+                redundant = False
+
+            if cleared and not redundant:
+                db.session.add(assign)
+                db.session.commit()
 
     unassigned_tasks = AssignedTask.query.filter_by(assigned_caregiver=None).all()
     all_tasks = AssignedTask.query.all()
@@ -374,20 +412,29 @@ def patient():
     pt = Patient.query.filter_by(login_id=current_user.id).first()
     dep = Department.query.filter_by(dept_no=pt.dept_no).first()
     certs = Certification.query.all()
-    all_tasks = Task.query.all()
+    requestable_tasks = Task.query.filter_by(required=False).all()
 
     if request.method == "POST":
         data = request.form
-        requested = AssignedTask(requesting_pt=pt.patient_no, task_no=data["task_no"])
-        db.session.add(requested)
-        db.session.commit()
+        new_request = AssignedTask(requesting_pt=pt.patient_no, task_no=data["task_no"])
 
-    requestable_tasks = Task.query.filter_by(required=False).all()
+        dupes = AssignedTask.query.filter_by(requesting_pt=pt.patient_no).all()
+        if dupes and len(dupes) > 0:
+            temp = []
+            for dupe in dupes:
+                if dupe.task_no == int(new_request.task_no):
+                    temp.append(dupe)
+            dupes = temp
+
+        if dupes and len(dupes) > 0:
+            flash("You may only request a task once.")
+        else:
+            db.session.add(new_request)
+            db.session.commit()
 
     my_tasks = AssignedTask.query.filter_by(requesting_pt=pt.patient_no).all()
     requested = []
     assigned = []
-
     for task in my_tasks:
         if task.assigned_caregiver == None:
             requested.append(Task.query.filter_by(task_no=task.task_no).first())
@@ -413,4 +460,6 @@ def patient():
 
 
 if __name__ == "__main__":
-    app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8080)), debug=True)
+    app.run(
+        host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8080)), debug=True
+    )
