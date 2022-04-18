@@ -4,29 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" content-"ie=edge">
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 40%;
-        }
-
-        th,
-        td {
-            border: 2px solid green;
-            padding: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
     <title>Management System</title>
     <link rel="stylesheet" href={{ url_for( 'static' , filename='style.css' ) }} />
 
 </head>
 
 <body>
-    <div class="header">
-        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+    <div class="container">
+        <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         <h1>{{dep.dept_name}}</h1>
         <h2>Welcome {{manager.first_name}} {{manager.last_name}} {{certs[manager.cert_no - 1].cert_name}}</h2>
     </div>
+
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul class="flashes">
@@ -36,114 +26,138 @@
     </ul>
     {% endif %}
     {% endwith %}
-    <div class="assign_task">
+
+    <div class="containerB">
         <form action="/manager" method="POST">
+            <input type="hidden" name="action" value="assign_task" />
             <fieldset>
-                <legend>Assign Task:</legend>
-                <label>Department Employees:</label>
-                <!-- <select id="thelist" name="emp_no" size={{dep_emps | length }}> -->
-                <input type="hidden" name="action" value="assign_task" />
-                <select id="thelist" name="emp_no">
-                    {% for i in range(dep_emps | length) %}
-                    <option value={{dep_emps[i].empl_no}}>{{dep_emps[i].last_name}}, {{dep_emps[i].first_name}}
-                        {{certs[dep_emps[i].cert_no - 1].cert_name}}</option>
-                    {% endfor %}
-                </select>
-                <br>
-                <label>Department Patients:</label>
-                <!-- <select id="thelist" name="pt_no" size={{dep_pts | length }}> -->
-                <select id="thelist" name="pt_no">
-                    {% for i in range(dep_pts | length) %}
-                    <option value={{dep_pts[i].patient_no}}>{{dep_pts[i].last_name}}, {{dep_pts[i].first_name}}
-                    </option>
-                    {% endfor %}
-                </select>
-                <br>
-                <label>Tasks:</label>
-                <!-- <select id="thelist" name="tasn_no" size={{tasks | length }}> -->
-                <select id="thelist" name="task_no">
-                    {% for i in range(tasks | length) %}
-                    <option value={{tasks[i].task_no}}>{{tasks[i].task_name}} {{tasks[i].priority}}</option>
-                    {% endfor %}
-                </select>
-                <br>
-                <input type="submit" value="Assign Task" class="btn" />
-                <br>
-                <br>
+                <legend>Assign A Task:</legend>
+
+                <div class="containerB">
+                    <div class="one">
+                        <label>Select employee:</label><br>
+                        <select class="selectC" id="thelist" name="emp_no">
+                            {% for i in range(dep_emps | length) %}
+                            <option value={{dep_emps[i].empl_no}}>{{dep_emps[i].last_name}}, {{dep_emps[i].first_name}}
+                                {{certs[dep_emps[i].cert_no - 1].cert_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="two">
+                        <label>Select patient:</label><br>
+                        <select class="selectC" id="thelist" name="pt_no">
+                            {% for i in range(dep_pts | length) %}
+                            <option value={{dep_pts[i].patient_no}}>{{dep_pts[i].last_name}}, {{dep_pts[i].first_name}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="three">
+                        <label>Select task:</label><br>
+                        <select class="selectC" id="thelist" name="task_no">
+                            {% for i in range(tasks | length) %}
+                            <option value={{tasks[i].task_no}}>{{tasks[i].task_name}} {{tasks[i].priority}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="container">
+                        <input type="submit" value="Assign Task" class="btnB">
+                    </div>
+                </div>
             </fieldset>
-            <br>
         </form>
     </div>
-    <div class="unassigned">
+
+    <!--     test -->
+
+    <div class="containerB">
         <fieldset>
-            <legend>Unassigned Tasks:</legend>
-            <table>
-                <tr>
-                    <th>Task</th>
-                    <th>Patient's Name</th>
-                    <th>Priority</th>
-                    <th>Assign Employees</th>
-                    <th>Assign</th>
-                </tr>
-                {% for i in range(unassigned_list| length)%}
-                <tr>
-                    <td>{{unassigned_list[i][0].task_name}}</td>
-                    <td>{{unassigned_list[i][1].last_name}}, {{unassigned_list[i][1].first_name}}</td>
-                    <td>{{unassigned_list[i][0].priority}}</td>
-                    <form action="/manager" method="POST">
-                        <td>
-                            <input type="hidden" name="action" value="assign_task" />
-                            <input type="hidden" name="pt_no" value={{unassigned_list[i][1].patient_no}} />
-                            <input type="hidden" name="task_no" value={{unassigned_list[i][0].task_no}} />
-                            <select id="thelist" name="emp_no">
-                                {% for j in range(dep_emps | length) %}
-                                <option value={{dep_emps[j].empl_no}}>
-                                    {{dep_emps[j].last_name}},
-                                    {{dep_emps[j].first_name}}
-                                    {{certs[dep_emps[j].cert_no - 1].cert_name}}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <input type="submit" value="Assign Task" />
-                        </td>
-                    </form>
-                </tr>
-                {% endfor %}
-            </table>
-            <br>
+            <legend>Unassigned Task List:</legend>
+            <div class="containerB">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Patient's Name</th>
+                            <th>Priority</th>
+                            <th>Assign Employees</th>
+                            <th>Assign</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in range(unassigned_list| length)%}
+                        <tr>
+                            <td>{{unassigned_list[i][0].task_name}}</td>
+                            <td>{{unassigned_list[i][1].last_name}}, {{unassigned_list[i][1].first_name}}</td>
+                            <td>{{unassigned_list[i][0].priority}}</td>
+                            <form action="/manager" method="POST">
+                                <td>
+                                    <input type="hidden" name="action" value="assign_task">
+                                    <input type="hidden" name="pt_no" value={{unassigned_list[i][1].patient_no}}>
+                                    <input type="hidden" name="task_no" value={{unassigned_list[i][0].task_no}}>
+                                    <select class="selectD" id="thelist" name="emp_no">
+                                        {% for j in range(dep_emps | length) %}
+                                        <option value={{dep_emps[j].empl_no}}>
+                                            {{dep_emps[j].last_name}},
+                                            {{dep_emps[j].first_name}}
+                                            {{certs[dep_emps[j].cert_no - 1].cert_name}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <input class="btnC" type="submit" value="Assign Task">
+                                </td>
+                            </form>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </fieldset>
     </div>
-    <div class="assigned">
+
+    <!--     test -->
+
+    <div class="containerB">
         <fieldset>
-            <legend>Assigned Tasks:</legend>
-            <table>
-                <tr>
-                    <th>Task</th>
-                    <th>Patient's Name</th>
-                    <th>Caregiver's Name</th>
-                    <th>Priority</th>
-                    <th>Complete</th>
-                </tr>
-                {% for i in range(assigned_list| length)%}
-                <tr>
-                    <td>{{assigned_list[i][0].task_name}}</td>
-                    <td>{{assigned_list[i][1].last_name}}, {{assigned_list[i][1].first_name}}</td>
-                    <td>{{assigned_list[i][2].last_name}}, {{assigned_list[i][2].first_name}}
-                        {{certs[assigned_list[i][2].cert_no - 1].cert_name}}</td>
-                    <td>{{assigned_list[i][0].priority}}</td>
-                    <td>
-                        <form action="/manager" method="POST">
-                            <input type="hidden" name="action" value="task_complete" />
-                            <input type="hidden" name="at_no" value={{assigned_list[i][3]}} />
-                            <input type="submit" value="Mark Complete" />
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-            <br>
+            <legend>Assigned Task List:</legend>
+            <div class="containerB">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Patient's Name</th>
+                            <th>Caregiver's Name</th>
+                            <th>Priority</th>
+                            <th>Complete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in range(assigned_list| length)%}
+                        <tr>
+                            <td>{{assigned_list[i][0].task_name}}</td>
+                            <td>{{assigned_list[i][1].last_name}}, {{assigned_list[i][1].first_name}}</td>
+                            <td>{{assigned_list[i][2].last_name}}, {{assigned_list[i][2].first_name}}
+                                {{certs[assigned_list[i][2].cert_no - 1].cert_name}}</td>
+                            <td>{{assigned_list[i][0].priority}}</td>
+                            <td>
+                                <form action="/manager" method="POST">
+                                    <input type="hidden" name="action" value="task_complete" />
+                                    <input type="hidden" name="at_no" value={{assigned_list[i][3]}} />
+                                    <input class="btnC" type="submit" value="Mark Complete" />
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </fieldset>
     </div>
 </body>
