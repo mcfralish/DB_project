@@ -4,24 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" content-"ie=edge">
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 40%;
-        }
-
-        th,
-        td {
-            border: 2px solid green;
-            padding: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
     <title>Patient System</title>
 </head>
 
 <body>
     <div class="container">
-        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+        <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         <h1>{{dep.dept_name}}</h1>
         <h2>Welcome {{pt.first_name}} {{pt.last_name}}</h2>
     </div>
@@ -34,92 +23,112 @@
     </ul>
     {% endif %}
     {% endwith %}
-    <div class="form">
+    <div class="container">
         <form action="/patient" method="POST">
             <fieldset>
-                <legend>Request a Task:</legend>
-                <input type="hidden" name="pt_no" value={{pt.patient_no}} />
-                <select id="thelist" name="task_no">
-                    {% for i in range(requestable_tasks | length)%}
-                    <option value={{requestable_tasks[i].task_no}}>{{requestable_tasks[i].task_name}}</option>
-                    {% endfor %}
-                </select>
-                <br>
-                <input type="submit" value="Request Task" class="btn" />
+                <legend>Request A Task:</legend>
+                <div class="container">
+                    <input type="hidden" name="pt_no" value={{pt.patient_no}} />
+                    <select class="selectA" id="thelist" name="task_no">
+                        {% for i in range(requestable_tasks | length)%}
+                        <option value={{requestable_tasks[i].task_no}}>{{requestable_tasks[i].task_name}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <input type="submit" value="Request Task" class="btn" />
+                </div>
+            </fieldset>
         </form>
     </div>
-    <br>
-    <br>
-    <div class="requested">
-        </fieldset>
-        <br>
+
+
+    <div class="container">
         <fieldset>
             <legend>Requested Tasks:</legend>
-            <table>
-                <tr>
-                    <th>Name</th>
-                </tr>
-                {% for i in range(requested | length)%}
-                <tr>
-                    <td>{{requested[i].task_name}}</td>
-                </tr>
-                {% endfor %}
-            </table>
+            <div class="container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in range(requested | length)%}
+                        <tr>
+                            <td>{{requested[i].task_name}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </fieldset>
     </div>
-    <div class="assigned">
-        <br>
+
+
+    <div class="container">
         <fieldset>
             <legend>Assigned Tasks:</legend>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Assigned Caregiver</th>
-                    <th>Expected Duration</th>
-                    <th>Medication</th>
-                    <th>Frequency</th>
-                </tr>
-                {% for i in range(assigned | length)%}
-                <tr>
-                    <td>{{assigned[i][0].task_name}}</td>
-                    <td>{{assigned[i][1].last_name}}, {{assigned[i][1].first_name}}
-                        {{certs[assigned[i][1].cert_no-1].cert_name}}</td>
-                    <td>{{assigned[i][0].duration}}</td>
-                    {% if assigned[i][0].isMedicine == True %}
-                    <td>Yes</td>
-                    {% else %}
-                    <td>No</td>
-                    {% endif %}
+            <div class="container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Assigned Caregiver</th>
+                            <th>Expected Duration</th>
+                            <th>Medication</th>
+                            <th>Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in range(assigned | length)%}
+                        <tr>
+                            <td>{{assigned[i][0].task_name}}</td>
+                            <td>{{assigned[i][1].last_name}}, {{assigned[i][1].first_name}}
+                                {{certs[assigned[i][1].cert_no-1].cert_name}}</td>
+                            <td>{{assigned[i][0].duration}}</td>
+                            {% if assigned[i][0].isMedicine == True %}
+                            <td>Yes</td>
+                            {% else %}
+                            <td>No</td>
+                            {% endif %}
 
-                    {% if assigned[i][0].frequency != None %}
-                    <td>{{assigned[i][0].frequency}}</td>
-                    {% else %}
-                    <td>No Frequency</td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </table>
+                            {% if assigned[i][0].frequency != None %}
+                            <td>{{assigned[i][0].frequency}}</td>
+                            {% else %}
+                            <td>No Frequency</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </fieldset>
     </div>
-    <br>
-    <br>
-    <div class="Visitor List">
+
+
+    <div class="container">
         </fieldset>
         <br>
         <fieldset>
-            <legend>Your Approved Visitors:</legend>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Relation</th>
-                </tr>
-                {% for i in range(visitors | length)%}
-                <tr>
-                    <td>{{visitors[i].first_name}} {{visitors[i].last_name}}</td>
-                    <td>{{visitors[i].association}}</td>
-                </tr>
-                {% endfor %}
-            </table>
+            <legend>Approved Visitors:</legend>
+            <div class="container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Relation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in range(visitors | length)%}
+                        <tr>
+                            <td>{{visitors[i].first_name}} {{visitors[i].last_name}}</td>
+                            <td>{{visitors[i].association}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </fieldset>
     </div>
 </body>

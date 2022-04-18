@@ -3,23 +3,21 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,        initial-scale=1.0" content-"ie=edge">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" content-"ie=edge">
     <link rel="stylesheet" href="/static/style.css">
-
     <title>Patient Login</title>
 </head>
 
 <body>
     <div class="container">
-
-        <img src="../static/ACME_MC_Logo.png" alt="ACME Medical Care" class="logo" />
+        <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         <form action="/login" method="POST">
             <div class="form">
-                <fieldset>
+                <fieldset class="container">
+                    <br>
                     <legend>Sign In:</legend>
-                    <label for="login">Patient ID:</label>
-                    <input type="text" id="login" name="patient"><br><br>
+                    <label for="login">Patient ID:</label><br>
+                    <input class="numB" type="text" id="login" name="patient"><br><br>
                 </fieldset>
                 <!-- button -->
                 <input type="submit" value="Submit" class="btn" />
