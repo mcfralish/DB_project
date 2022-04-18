@@ -1,7 +1,6 @@
 import os
 import random as r
-import numpy as np
-from flask import Flask, flash, render_template, redirect, request, url_for
+from flask import Flask, render_template
 from dotenv import load_dotenv, find_dotenv
 from models import (
     Users,
@@ -13,7 +12,6 @@ from models import (
     Patient,
     Visitor,
     Task,
-    AssignedTask,
 )
 import datetime
 
@@ -129,7 +127,7 @@ def index():
         "Rita",
         "Quirinus",
         "Horace",
-        "Lily",
+        "Lilly",
         "James",
         "viktor",
         "Vincent",

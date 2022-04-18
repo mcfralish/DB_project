@@ -356,7 +356,7 @@ def manager():
     certs = Certification.query.all()
     tasks = Task.query.all()
     dep_pts = Patient.query.filter_by(dept_no=dep.dept_no).all()
-    dep_emps = Employee.query.all()
+    dep_emps = Employee.query.filter_by(dept_no=dep.dept_no).all()
 
     if request.method == "POST":
         data = request.form
