@@ -85,7 +85,7 @@ def index():
     shifts = list(range(1, 5 + 1))
     dob_years = list(range(1955, 2002))
     hire_years = list(range(2010, 2022))
-    days = list(range(1, 31))
+    days = list(range(1, 29))
     months = list(range(1, 13))
     certs = list(range(1, 6 + 1))
     first_names = [
