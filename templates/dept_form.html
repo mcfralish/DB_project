@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="/static/style.css">
 
-    <title>Employee Form</title>
+    <title>Department Form</title>
 </head>
 
 <body>
@@ -48,6 +48,13 @@
             <input type="submit" value="Submit" class="btn" />
     </div>
     </form>
+    <div class="containerC">
+        <button class="btn" id="back_button">Return to Admin Home Page</button>
+        <script type="text/javascript"> document.getElementById("back_button").onclick = function () {
+                location.href = "/admin";
+            };
+        </script>
+    </div>
 </body>
 
 </html>

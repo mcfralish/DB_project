@@ -7,14 +7,14 @@
 
     <link rel="stylesheet" href="/static/style.css">
 
-    <title>Shift Form</title>
+    <title>Schedule Form</title>
 </head>
 
 <body>
-    <div class="container">
+    <div class="containerB">
         <a href="/"> <img src="../static/ACME_MC_Logo.png" class="logo"></a>
         <form action="/handle_admin" method="POST">
-            <fieldset class="container">
+            <fieldset class="containerB">
                 <legend>Add Schedule Form:</legend>
                 <div class="row">
                     <br>
@@ -49,6 +49,13 @@
             </fieldset>
             <input type="submit" value="Submit" class="btn" />
         </form>
+        <div class="containerD">
+            <button class="btn" id="back_button">Return to Admin Home Page</button>
+            <script type="text/javascript"> document.getElementById("back_button").onclick = function () {
+                    location.href = "/admin";
+                };
+            </script>
+        </div>
     </div>
 </body>
 
