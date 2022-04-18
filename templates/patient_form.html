@@ -42,7 +42,7 @@
                     <div class="column">
                         <label for="hire">Patient's Date of Admission:</label>
                         <br>
-                        <input class="selectB" type="date" name="adm" />
+                        <input class="selectB" type="date" name="adm" required />
                         <br>
                         <label for="dept">Select department:</label>
                         <select class="name" name="dept_no" id="dept" required>
@@ -51,15 +51,6 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <!-- <br>
-                <br>
-                <label for="caretaker">Select Caretaker:</label>
-                <select name="caretaker_no" id="caretaker">
-                    {% for i in range(emps | length )%}
-                    <option value={{emps[i].empl_no}}>{{emps[i].last_name}}, {{emps[i].first_name}}
-                        {{certs[emps[i].cert_no - 1].cert_name}}</option>
-                    {% endfor %}
-                </select> -->
                 </div>
             </fieldset>
             <input type="submit" value="Submit" class="btn" />

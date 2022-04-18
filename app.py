@@ -1,5 +1,6 @@
 # https://stackoverflow.com/questions/22364551/creating-flask-form-with-selects-from-more-than-one-table
 # https://docs.sqlalchemy.org/en/14/core/type_basics.html#sqlalchemy.types.Time
+from genericpath import exists
 from operator import and_
 import os
 from flask import Flask, flash, render_template, redirect, request, url_for
@@ -166,7 +167,7 @@ def handle_admin():
     print(data)
 
     if data["type"] == "department":
-        if data["dept_name"] != ""
+        if data["dept_name"] != "":
             new = Department(
                 dept_name=data["dept_name"],
                 building=data["building"],
@@ -174,6 +175,7 @@ def handle_admin():
             )
             flash("Department Added")
         else:
+            new = None
             flash("Department must have a name.")
 
     if data["type"] == "shift":
@@ -192,7 +194,7 @@ def handle_admin():
             work_days += "F "
         if "Saturday" in keys:
             work_days += "Sa"
-        
+
         if work_days != "":
             new = Shift(
                 work_days=work_days,
@@ -200,28 +202,41 @@ def handle_admin():
             )
             flash("Shift Added")
         else:
+            new = None
             flash("Shift must include at least one day.")
 
     if data["type"] == "certification":
-        if data["cert_name"] != ""
+        if data["cert_name"] != "":
             new = Certification(
-                cert_name=data["cert_name"], pay=data["pay"], clearance=data["clearance"]
+                cert_name=data["cert_name"],
+                pay=data["pay"],
+                clearance=data["clearance"],
             )
             flash("Certification Added")
         else:
+            new = None
             flash("Certification must have a name.")
 
     if data["type"] == "employee":
+
         if data["first_name"] == "":
+            new = None
             flash("Employee must have a first name")
 
         elif data["first_name"] == "":
+            new = None
             flash("Employee must have a last name")
 
         elif data["phone"] == "":
+            new = None
             flash("Employee must have a phone number")
 
         else:
+            if data["shift_no"]:
+                shift_no = int(data["shift_no"])
+            else:
+                shift_no = None
+
             new_user = Users()
             db.session.add(new_user)
             db.session.commit()
@@ -235,19 +250,22 @@ def handle_admin():
                 hire=str(data["hire"]),
                 login_id=new_user.id,
                 dept_no=int(data["dept_no"]),
-                shift_no=int(data["shift_no"]),
+                shift_no=shift_no,
                 cert_no=int(data["cert_no"]),
             )
             flash("Employee Added")
 
     if data["type"] == "patient":
         if data["first_name"] == "":
+            new = None
             flash("Employee must have a first name")
 
         elif data["first_name"] == "":
+            new = None
             flash("Employee must have a last name")
 
         elif data["phone"] == "":
+            new = None
             flash("Employee must have a phone number")
 
         else:
@@ -268,12 +286,15 @@ def handle_admin():
 
     if data["type"] == "visitor":
         if data["first_name"] == "":
+            new = None
             flash("Visitor must have a first name")
 
         if data["last_name"] == "":
+            new = None
             flash("Visitor must have a first name")
 
         if data["association"] == "":
+            new = None
             flash("Visitor must have an association")
 
         else:
@@ -311,6 +332,11 @@ def handle_admin():
         if (new.recurring == False) and (new.frequency != None):
             new = None
             flash("May not include frequency on non-recurring tasks.")
+
+        if (new.recurring == True) and (new.frequency == None):
+            new = None
+            flash("Must include frequency on recurring tasks.")
+
         else:
             flash("Task Added")
 

@@ -44,11 +44,11 @@
                         <label for="status">Employee type:</label><br>
                         <input type="radio" name="status" value="A"> Administrator<br>
                         <input type="radio" name="status" value="M"> Management<br>
-                        <input type="radio" name="status" value="E"> Employee<br>
+                        <input type="radio" name="status" value="E" checked> Employee<br>
                         <br>
                         <label for="hire">Employee's hire date:</label>
                         <br>
-                        <input class="selectB" type="date" name="hire" placeholder="Employee's hire date">
+                        <input class="selectB" type="date" name="hire" placeholder="Employee's hire date" required>
                         <br>
                         <label for="dept">Select department:</label>
                         <select class="name" name="dept_no" required>
@@ -67,7 +67,7 @@
                         </select>
                         <br>
                         <label for="cert">Select Certification:</label>
-                        <select class="selectB" name="cert_no">
+                        <select class="selectB" name="cert_no" required>
                             {% for i in range(certs | length )%}
                             <option value={{certs[i].cert_no}}>{{certs[i].cert_name}}</option>
                             {% endfor %}
