@@ -9,19 +9,10 @@ meta = MetaData()
 db = SQLAlchemy()
 
 
-# assigned_task_table = db.Table(
-#     "task",
-#     meta,
-#     db.Column("task_id", ForeignKey("Task.id"), primary_key=True),
-#     db.Column("patient_id", ForeignKey("Patient.id"), primary_key=True),
-#     db.Column("emp_id", ForeignKey("Employee.id"), primary_key=True),
-# )
-
-
 class Users(db.Model, UserMixin, Base):
     id = db.Column(db.Integer, primary_key=True)
-    employee = relationship("Employee", uselist=False)
-    patient = relationship("Patient", uselist=False)
+    employee = relationship("Employee")
+    patient = relationship("Patient")
 
 
 class Department(db.Model, Base):
