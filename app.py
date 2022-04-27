@@ -1,7 +1,3 @@
-# https://stackoverflow.com/questions/22364551/creating-flask-form-with-selects-from-more-than-one-table
-# https://docs.sqlalchemy.org/en/14/core/type_basics.html#sqlalchemy.types.Time
-from genericpath import exists
-from operator import and_
 import os
 from flask import Flask, flash, render_template, redirect, request, url_for
 from flask_login import (
@@ -9,14 +5,12 @@ from flask_login import (
     LoginManager,
     login_required,
     login_user,
-    logout_user,
 )
 from dotenv import load_dotenv, find_dotenv
 from sqlalchemy import and_
 from models import (
     Users,
     db,
-    # assigned_task_table,
     Department,
     Shift,
     Certification,
@@ -26,7 +20,6 @@ from models import (
     Task,
     AssignedTask,
 )
-import datetime
 
 
 load_dotenv(find_dotenv())
@@ -152,9 +145,6 @@ def admin():
         if request.form.get("task"):
             certs = Certification.query.all()
             return render_template("task_form.html", certs=certs)
-
-        # if request.form.get("medication"):
-        #     return render_template("med_form.html")
 
     return render_template("admin.html")
 
